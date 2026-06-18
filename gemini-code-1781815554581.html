@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RED MIXER — Премиальный сервис анонимизации криптовалюты</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🌪</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --p:#a855f7;--p2:#9333ea;--p3:#7e22ce;
+  --pa:#c084fc;--pb:#d8b4fe;
+  --bg:#09090b;--c1:#121214;--c2:#1a1a1e;--c3:#232329;
+  --br:rgba(255,255,255,.06);--br2:rgba(168,85,247,.4);
+  --tx:#f4f4f5;--tx2:#a1a1aa;--tx3:#71717a;
+  --gn:#22c55e;--pill:rgba(168,85,247,.1);--pill-tx:#e9d5ff;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:16px;overflow-x:hidden;line-height:1.6;max-width:480px;margin:0 auto;position:relative;}
+
+/* ФОНОВЫЕ АНИМАЦИИ */
+.bg-canvas {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #110e1a 0%, #09090b 100%);
+}
+.cyber-grid {
+  position: absolute;
+  bottom: -20vh; left: -50vw;
+  width: 200vw; height: 60vh;
+  background-image: 
+    linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(75deg);
+  animation: gridMove 20s linear infinite;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+@keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 50px; } }
+
+.glow-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.35; animation: floatOrb 25s ease-in-out infinite alternate; }
+.orb-1 { width: 50vw; height: 50vw; background: #a855f7; top: -10%; left: -10%; animation-duration: 30s; }
+.orb-2 { width: 45vw; height: 45vw; background: #3b82f6; bottom: 10%; right: -10%; animation-duration: 25s; opacity: 0.2; }
+.orb-3 { width: 35vw; height: 35vw; background: #7e22ce; top: 30%; left: 40%; animation-duration: 35s; }
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4vw, 8vh) scale(1.1); }
+  100% { transform: translate(-4vw, 4vh) scale(0.9); }
+}
+
+.particle { position: absolute; background: var(--p); border-radius: 50%; box-shadow: 0 0 10px var(--p); opacity: 0; animation: riseUp linear infinite; }
+.p1 { width: 4px; height: 4px; left: 15%; bottom: -10px; animation-duration: 12s; }
+.p2 { width: 5px; height: 5px; left: 45%; bottom: -10px; animation-duration: 16s; animation-delay: 3s; }
+.p3 { width: 3px; height: 3px; left: 75%; bottom: -10px; animation-duration: 14s; animation-delay: 6s; }
+@keyframes riseUp { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.4; } 80% { opacity: 0.2; } 100% { transform: translateY(-100vh); opacity: 0; } }
+
+nav, .hero, .ticker, .stats-bar, .section, footer { position: relative; z-index: 10; }
+
+/* ШАПКА */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;backdrop-filter:blur(24px);background:rgba(9,9,11,.6);border-bottom:1px solid rgba(255,255,255,0.03);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-em{font-size:22px;line-height:1;background:linear-gradient(135deg,#fff,var(--pa));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Unbounded',sans-serif;}
+.logo-txt{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:900;color:var(--tx);letter-spacing:-0.03em;}
+.logo-txt b{color:var(--p);font-weight:900;}
+.nav-sup{padding:10px 22px;background:var(--p);color:#fff;font-size:13px;font-weight:600;border-radius:99px;text-decoration:none;transition:all .25s;font-family:'Unbounded',sans-serif;box-shadow:0 0 20px rgba(168,85,247,0.3);}
+.nav-sup:hover{background:var(--p2);transform:translateY(-2px);box-shadow:0 0 30px rgba(168,85,247,0.5);}
+
+/* HERO */
+.hero{padding:32px 20px 24px;text-align:left;}
+.hero-content { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+.hero-deco{font-family:'Unbounded',sans-serif;font-size:11px;color:var(--pa);text-transform:uppercase;letter-spacing:.15em;font-weight:700; display: inline-flex; align-items: center; gap: 6px; }
+.hero-deco::before { content:''; width: 6px; height: 6px; background: var(--p); border-radius: 50%; box-shadow: 0 0 8px var(--p); }
+
+.hero-h1{font-family:'Unbounded',sans-serif;font-size:clamp(32px,8vw,48px);font-weight:900;line-height:1.15;letter-spacing:-.04em;color:#fff;}
+.hero-h1 span{
+  background: linear-gradient(135deg, var(--pb), var(--p), #3b82f6);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShine 4s linear infinite;
+}
+@keyframes textShine { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+.hero-subtitle { font-size: 15px; color: var(--tx2); line-height: 1.6; max-width: 90%; margin-bottom: 4px; }
+
+.hero-bullets { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+.hb-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 18px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.05);
+}
+.hb-item:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.06) 0%, rgba(59, 130, 246, 0.02) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px) translateX(4px);
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.06), inset 0 1px 0px rgba(255, 255, 255, 0.1);
+}
+.hb-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  background: rgba(168, 85, 247, 0.12);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+  transition: all 0.3s ease;
+}
+.hb-item:hover .hb-icon {
+  background: #a855f7;
+  color: #ffffff;
+  border-color: #a855f7;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  transform: scale(1.05);
+}
+.hb-txt { display: flex; flex-direction: column; gap: 4px; }
+.hb-title { font-size: 15px; font-weight: 700; color: #ffffff; letter-spacing: -0.01em; }
+.hb-desc { font-size: 13px; color: #a1a1aa; line-height: 1.5; }
+
+/* ФОРМА МИКСИРОВАНИЯ */
+.form-box{
+  background:rgba(18, 18, 20, 0.75);
+  backdrop-filter: blur(24px);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  animation: levitateForm 8s ease-in-out infinite;
+}
+@keyframes levitateForm { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.fld{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.fld label{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-family:'Unbounded',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fld input,.fld select{background:rgba(0,0,0,0.3);border:1px solid var(--br);border-radius:14px;padding:14px 16px;color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:all .25s;width:100%;-webkit-appearance:none;}
+.fld input::placeholder{color:var(--tx3);}
+.fld input:focus,.fld select:focus{background:rgba(168,85,247,0.04);border-color:var(--br2);box-shadow:0 0 0 4px rgba(168,85,247,.15);}
+.fld select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2371717a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;}
+.fld select option{background:#121214;}
+
+/* Сетка для параллельных полей */
+.f2{display:grid;grid-template-columns:1.2fr 0.8fr;gap:12px;}
+
+/* КАЛЬКУЛЯТОР МИКСЕРА */
+.exch{background:rgba(255,255,255,0.02);border:1px solid var(--br);border-radius:18px;padding:16px;margin-bottom:16px;}
+.exch-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.exch-lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;font-family:'Unbounded',sans-serif;}
+.exch-rate-lbl{font-size:12px;color:var(--pa);font-family:'Unbounded',sans-serif;font-weight:700; text-shadow: 0 0 10px rgba(192,132,252,0.3);}
+.exch-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:14px;}
+.exch-arr{width:36px;height:36px;background:var(--c3);border:1px solid var(--br);border-radius:50%;display:grid;place-items:center;margin-top:22px; transition: transform 0.3s;}
+.exch-arr:hover { transform: rotate(180deg); }
+.exch-arr svg{width:16px;height:16px;stroke:var(--pa);fill:none;stroke-width:2;}
+.exch-fixed{background:var(--c2);border:1px solid var(--br);border-radius:14px;padding:14px 16px;font-size:14px;font-weight:600;color:var(--tx);display:flex;align-items:center;gap:6px;height:50px;}
+.res-box{background:rgba(0,0,0,0.25);border:1px solid var(--br);border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.res-lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px;}
+.res-val{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:#fff;}
+.res-val.mt{color:var(--tx3);font-size:13px;font-family:'Inter',sans-serif;font-weight:400;}
+.res-cur{font-family:'Unbounded',sans-serif;font-size:14px;color:var(--pa);font-weight:700;}
+
+/* ЧЕКБОКСЫ И КНОПКА */
+.cks{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.ck{display:flex;align-items:flex-start;gap:12px;cursor:pointer;user-select:none;}
+.ck input{display:none;}
+.ck-b{width:18px;height:18px;min-width:18px;border:1px solid var(--tx3);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px;background:rgba(0,0,0,0.3);}
+.ck:has(input:checked) .ck-b{background:var(--p);border-color:var(--p);box-shadow:0 0 15px rgba(168,85,247,0.4);}
+.ck-m{display:none;}
+.ck:has(input:checked) .ck-m{display:block;}
+.ck-m svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;}
+.ck-l{font-size:12px;color:var(--tx2);line-height:1.5;}
+.ck-l a{color:var(--pa);text-decoration:none;border-bottom:1px solid rgba(192,132,252,0.2);}
+
+.btn-big{width:100%;padding:18px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:14px;font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 30px rgba(168,85,247,0.3);}
+.btn-big:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(168,85,247,0.5);}
+.btn-big svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;}
+
+/* БЕГУЩАЯ СТРОКА */
+.ticker{overflow:hidden;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:14px 0;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);margin-bottom:32px;}
+.ticker-track{display:flex;gap:40px;animation:tk 25s linear infinite;white-space:nowrap;font-size:13px;color:var(--tx2);}
+.tk-i{display:inline-flex;align-items:center;gap:8px;}
+.tk-k{font-size:11px;color:var(--tx3);text-transform:uppercase;font-weight:600;font-family:'Unbounded',sans-serif;}
+.tk-v{color:var(--pa);font-weight:700;}
+.tk-g{color:var(--gn);font-size:11px;}
+@keyframes tk{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ПАНЕЛЬ СТАТИСТИКИ */
+.stats-bar{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:20px;padding:20px;margin:0 16px 32px;display:flex;align-items:stretch;}
+.stat-item{flex:1;text-align:center;}
+.stat-item+.stat-item{border-left:1px solid var(--br);}
+.stat-v{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;}
+.stat-l{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;}
+
+/* СЕКЦИИ И КАРТОЧКИ */
+.section{padding:0 16px;margin-bottom:48px;}
+.sec-deco{font-family:'Unbounded',sans-serif;font-size:10px;color:var(--p);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;font-weight:700;}
+.sec-h{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;letter-spacing:-.03em;margin-bottom:24px;line-height:1.2;color:#fff;}
+
+.feat-list{display:flex;flex-direction:column;gap:12px;}
+.feat-card{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:20px;padding:24px;transition:all .4s ease;}
+.feat-card:hover{background:rgba(26, 26, 30, 0.8);border-color:rgba(168,85,247,0.4);transform:translateY(-5px);box-shadow: 0 10px 30px rgba(168,85,247,0.15);}
+.feat-card-title{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;margin-bottom:10px;color:#fff;}
+.feat-card:hover .feat-card-title { color: var(--pb); }
+.feat-card-desc{font-size:14px;color:var(--tx2);line-height:1.6;}
+
+.how-list{display:flex;flex-direction:column;gap:12px;}
+.how-item{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:20px;padding:24px;display:flex;gap:20px;transition:all .3s;}
+.how-item:hover{background:rgba(26, 26, 30, 0.8);border-color:rgba(168,85,247,0.3); transform: translateX(4px);}
+.how-num{font-family:'Unbounded',sans-serif;font-size:36px;font-weight:900;color:rgba(168,85,247,0.15);line-height:1;min-width:40px;transition:all 0.3s;}
+.how-item:hover .how-num{color:var(--p); text-shadow: 0 0 15px rgba(168,85,247,0.4);}
+.how-title{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;color:#fff;}
+.how-desc{font-size:14px;color:var(--tx2);line-height:1.6;}
+
+.off-list{display:flex;flex-direction:column;gap:12px;}
+.off-card{background:rgba(18, 18, 20, 0.6);border:1px solid var(--br);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:16px;}
+.off-num{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--p);min-width:24px;}
+.off-name{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.off-sub{font-size:13px;color:var(--tx3);margin-top:2px;}
+.off-badge{margin-left:auto;font-size:11px;color:var(--gn);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:4px 12px;font-weight:500;}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:10px;}
+.faq-item{background:rgba(18, 18, 20, 0.6);border:1px solid var(--br);border-radius:16px;overflow:hidden;cursor:pointer;}
+.faq-q{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:15px;font-weight:500;color:#fff;}
+.faq-icon{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.2);display:grid;place-items:center;transition:all .3s;border:1px solid var(--br);}
+.faq-icon svg{width:14px;height:14px;stroke:var(--pa);fill:none;stroke-width:2.5;}
+.faq-item.open {border-color:var(--p);}
+.faq-item.open .faq-icon{transform:rotate(180deg);background:var(--p);border-color:var(--p);}
+.faq-item.open .faq-icon svg{stroke:#fff;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;font-size:14px;color:var(--tx2);line-height:1.6;padding:0 20px;}
+.faq-item.open .faq-a{max-height:250px;padding:0 20px 20px;}
+
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:32px 20px;display:flex;flex-direction:column;gap:20px;background:rgba(9, 9, 11, 0.8);backdrop-filter: blur(10px);}
+.ft-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.ft-m{width:28px;height:28px;background:var(--p);border-radius:8px;display:grid;place-items:center;font-size:14px;font-weight:900;color:#fff;font-family:'Unbounded',sans-serif;}
+.ft-n{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:900;color:#fff;}
+.ft-n b{color:var(--p);}
+.ft-links{display:flex;flex-direction:column;gap:10px;}
+.ft-links a{font-size:13px;color:var(--tx3);text-decoration:none;}
+.ft-c{font-size:12px;color:var(--tx3);border-top:1px solid var(--br);padding-top:16px;}
+
+.scroll-up{position:fixed;bottom:24px;right:20px;width:48px;height:48px;background:rgba(18,18,20,0.8);backdrop-filter:blur(5px);border:1px solid rgba(168,85,247,0.3);border-radius:50%;display:grid;place-items:center;cursor:pointer;z-index:200;transition:all .4s;opacity:0;pointer-events:none;}
+.scroll-up.show{opacity:1;pointer-events:all;}
+.scroll-up svg{width:20px;height:20px;stroke:var(--pa);fill:none;stroke-width:2.5;}
+
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(0.16, 1, 0.3, 1), transform .6s cubic-bezier(0.16, 1, 0.3, 1);}
+.fade-up.in{opacity:1;transform:translateY(0);}
+
+/* ДЕСКТОП СТИЛИ */
+@media(min-width:481px){
+  body{max-width:100%;}
+  nav{padding:18px 40px;}
+  .hero{padding:48px 40px 32px;}
+  .form-box{border-radius:28px;padding:32px;}
+  .stats-bar{margin:0 40px 40px;padding:24px;}
+  .section{padding:0 40px;margin-bottom:64px;}
+  footer{padding:40px;flex-direction:row;justify-content:space-between;align-items:center;}
+  .ft-links{flex-direction:row;gap:24px;}
+  .ft-c{border:none;padding:0;margin:0;}
+}
+
+@media(min-width:768px){
+  body{max-width:1140px;margin:0 auto;}
+  .hero{padding:80px 40px 60px;display:grid;grid-template-columns:1.1fr 0.9fr;align-items:start;gap:48px;}
+  .hero-content { margin-bottom: 0; position: sticky; top: 120px; }
+  .form-box{grid-column:2;}
+  .feat-list{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .feat-list .feat-card:last-child{grid-column:span 2;}
+  .how-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .off-list{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-canvas">
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+  <div class="cyber-grid"></div>
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+</div>
+
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-em">🌪</div>
+    <div class="logo-txt"><b>RED</b> MIXER</div>
+  </a>
+  <a href="#form-section" class="nav-sup">Очистить</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-content fade-up in">
+    <div class="hero-deco">NEXT-GEN CRYPTO PRIVACY</div>
+    <h1 class="hero-h1">Анонимизация<br>и очистка<br><span>Крипты</span></h1>
+    <p class="hero-subtitle">
+      Премиальный внебиржевой сервис микширования. Мы полностью разрываем связь между вашей личностью и историей транзакций, защищая активы от систем отслеживания блокчейна.
+    </p>
+
+    <div class="hero-bullets">
+      <div class="hb-item">
+        <div class="hb-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <div class="hb-txt">
+          <div class="hb-title">Быстрое микширование</div>
+          <div class="hb-desc">Процесс сквозного распределения и очистки занимает всего 15–30 минут.</div>
+        </div>
+      </div>
+
+      <div class="hb-item">
+        <div class="hb-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="hb-txt">
+          <div class="hb-title">Zero-Knowledge приватность</div>
+          <div class="hb-desc">Никаких KYC верификаций, аккаунтов и логов. Полная независимость.</div>
+        </div>
+      </div>
+
+      <div class="hb-item">
+        <div class="hb-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+            <polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </div>
+        <div class="hb-txt">
+          <div class="hb-title">Гарантированно чистые пулы</div>
+          <div class="hb-desc">Вы получаете только верифицированные монеты из проверенных ликвидных резервов.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ОБНОВЛЕННАЯ ФОРМА -->
+  <div class="form-box fade-up in" id="form-section">
+    
+    <!-- Параллельная строка: Мессенджер и Задержка -->
+    <div class="f2">
+      <div class="fld">
+        <label>Telegram / Signal</label>
+        <input type="text" id="phone" placeholder="@username или ник">
+      </div>
+      <div class="fld">
+        <label>Задержка</label>
+        <input type="text" id="tg" placeholder="Случайная">
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>Чистый кошелёк назначения (Куда зачислить)</label>
+      <input type="text" id="wallet" placeholder="TXXXXXXX... (Адрес TRC20)">
+    </div>
+    
+    <div class="fld">
+      <label>Дополнительный кошелек (для разделения суммы)</label>
+      <input type="text" id="timeCustom" placeholder="Необязательно (адрес №2)">
+    </div>
+
+    <div class="exch">
+      <div class="exch-top">
+        <span class="exch-lbl">Параметры объема</span>
+        <span class="exch-rate-lbl">Тариф пула: <span id="dispRate">от 1.5%</span></span>
+      </div>
+      <div class="exch-row">
+        <div class="fld" style="margin:0">
+          <label>Тип актива</label>
+          <select id="give" onchange="recalc()">
+            <option value="">— коин —</option>
+            <option value="rub">USDT (TRC20)</option>
+            <option value="usd">Bitcoin (BTC)</option>
+            <option value="eur">Ethereum (ETH)</option>
+          </select>
+        </div>
+        <div class="exch-arr"><svg viewBox="0 0 24 24"><polyline points="7 10 12 15 17 10"/></svg></div>
+        <div class="fld" style="margin:0">
+          <label>Результат</label>
+          <div class="exch-fixed">Анонимный коин</div>
+        </div>
+      </div>
+      <div class="fld" style="margin-bottom:12px;">
+        <label id="amtLabel">Объём для микширования</label>
+        <input type="number" id="amount" placeholder="Количество" min="0" oninput="recalc()">
+      </div>
+      <div class="res-box">
+        <div>
+          <div class="res-lbl">Чистыми к получению (ориентировочно)</div>
+          <div class="res-val mt" id="resultVal">— укажите объём активов</div>
+        </div>
+        <div class="res-cur" id="resultCur"></div>
+      </div>
+    </div>
+
+    <div class="cks">
+      <label class="ck"><input type="checkbox" id="chk1"><div class="ck-b"><div class="ck-m"><svg viewBox="0 0 12 9"><polyline points="1 4 4.5 8 11 1"/></svg></div></div><div class="ck-l">Я согласен с условиями <a href="#">необратимости транзакций</a></div></label>
+      <label class="ck"><input type="checkbox" id="chk2"><div class="ck-b"><div class="ck-m"><svg viewBox="0 0 12 9"><polyline points="1 4 4.5 8 11 1"/></svg></div></div><div class="ck-l">Ознакомлен с <a href="#">политикой удаления логов</a></div></label>
+    </div>
+
+    <button class="btn-big" onclick="submitForm()">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Инициировать сессию очистки
+    </button>
+  </div>
+</div>
+
+<!-- БЕГУЩАЯ СТРОКА -->
+<div class="ticker fade-up">
+  <div class="ticker-track">
+    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span> <span class="tk-g">▲</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Минимум</span> 1 000 USDT</span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Анонимизация</span> 15–30 мин</span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Режим</span> Автоматический 24/7</span>
+    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span> <span class="tk-g">▲</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Минимум</span> 1 000 USDT</span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Анонимизация</span> 15–30 мин</span>
+    <span>·</span><span class="tk-i"><span class="tk-k">Режим</span> Автоматический 24/7</span>
+  </div>
+</div>
+
+<div class="stats-bar fade-up">
+  <div class="stat-item"><div class="stat-v">100%</div><div class="stat-l">Анонимность</div></div>
+  <div class="stat-item"><div class="stat-v">15–30</div><div class="stat-l">мин / очистка</div></div>
+  <div class="stat-item"><div class="stat-v">0%</div><div class="stat-l">сохранения логов</div></div>
+</div>
+
+<div class="section fade-up">
+  <div class="sec-deco">Конфиденциальность корпоративного уровня</div>
+  <h2 class="sec-h">Почему именно RED MIXER?</h2>
+  <div class="feat-list">
+    <div class="feat-card fade-up">
+      <div class="feat-card-title">Собственные пулы ликвидности</div>
+      <div class="feat-card-desc">Мы не перемешиваем ваши монеты с монетами других текущих пользователей. Вы получаете средства напрямую из наших изолированных биржевых резервов.</div>
+    </div>
+    <div class="feat-card fade-up">
+      <div class="feat-card-title">Полное уничтожение логов</div>
+      <div class="feat-card-desc">Все метаданные сессии, IP-адреса и история транзакций стираются автоматически через 24 часа. Данные невозможно восстановить или изъять.</div>
+    </div>
+    <div class="feat-card fade-up">
+      <div class="feat-card-title">Автоматизированная поддержка 24/7</div>
+      <div class="feat-card-desc">Вся экосистема функционирует круглосуточно. Наша команда дежурит без перерывов для обеспечения бесперебойности крупных потоков.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section fade-up">
+  <h2 class="sec-h">Алгоритм микширования</h2>
+  <div class="how-list">
+    <div class="how-item fade-up"><div class="how-num">1</div><div><div class="how-title">Создание сессии</div><div class="how-desc">Вы указываете адрес назначения и вносите монеты, подлежащие очистке, на сгенерированный системой пул-адрес.</div></div></div>
+    <div class="how-item fade-up"><div class="how-num">2</div><div><div class="how-title">Дробление и симуляция</div><div class="how-desc">Ваш актив разбивается на сотни мелких случайных частей и проходит через каскад транзакций, симулируя реальную активность рынка.</div></div></div>
+    <div class="how-item fade-up"><div class="how-num">3</div><div><div class="how-title">Вывод чистых активов</div><div class="how-desc">На ваш чистый кошелек поступают монеты из независимого пула с безупречной историей блокчейна и нулевым AML-индексом.</div></div></div>
+  </div>
+</div>
+
+<div class="section fade-up">
+  <h2 class="sec-h">Крупные объёмы (OTC Cash-Mix)</h2>
+  <p style="font-size:14px; color:var(--tx2); margin-bottom:16px;">Для конфиденциального микширования сверхкрупных сумм доступен запуск сессий через наличный расчет в наших охраняемых офисах или через инкассаторов.</p>
+  <div class="off-list">
+    <div class="off-card fade-up"><div class="off-num">01</div><div><div class="off-name">Москва</div><div class="off-sub">Москва-Сити VIP</div></div><div class="off-badge">● Доступно</div></div>
+    <div class="off-card fade-up"><div class="off-num">02</div><div><div class="off-name">Санкт-Петербург</div><div class="off-sub">Офис в Центре</div></div><div class="off-badge">● Доступно</div></div>
+    <div class="off-card fade-up"><div class="off-num">03</div><div><div class="off-name">Ярославль</div><div class="off-sub">Центральный филиал</div></div><div class="off-badge">● Доступно</div></div>
+  </div>
+</div>
+
+<div class="section fade-up" id="faq-section">
+  <h2 class="sec-h">База знаний</h2>
+  <div class="faq-list">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Что такое крипто-миксер и зачем он нужен?<div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+      <div class="faq-a">Миксер криптовалюты (клининг-сервис) — это инструмент защиты финансовой приватности. Он разрывает прямую связь в публичном блокчейне между вашей личностью, вашей прошлой деятельностью и вашим текущим кошельком. Это делает невозможным тотальную слежку за вашими расходами.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="#" class="ft-logo"><div class="ft-m">🌪</div><div class="ft-n"><b>RED</b> MIXER</div></a>
+  <div class="ft-links"><a href="#">Политика удаления логов</a><a href="#">Условия приватности</a></div>
+  <div class="ft-c">© 2026 RED MIXER. Все права защищены.</div>
+</footer>
+
+<div class="scroll-up" id="scrollUp" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+
+<script>
+function fmt(n,d){return n.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function recalc(){
+  const give=document.getElementById('give').value;
+  const raw=parseFloat(document.getElementById('amount').value)||0;
+  const rv=document.getElementById('resultVal');
+  const rc=document.getElementById('resultCur');
+  const lbl=document.getElementById('amtLabel');
+  if(!give){rv.className='res-val mt';rv.textContent='— выберите тип актива';rc.textContent='';return;}
+  
+  const feePercent = 0.015;
+  const lbls={rub:'Объём USDT для очистки',usd:'Объём BTC для очистки',eur:'Объём ETH для очистки'};
+  const curs={rub:'USDT',usd:'BTC',eur:'ETH'};
+  lbl.textContent=lbls[give];
+  
+  if(raw>0){
+    const res=raw * (1 - feePercent);
+    rv.className='res-val';rv.textContent=fmt(res,4);rc.textContent=curs[give];
+  }else{rv.className='res-val mt';rv.textContent='— введите сумму';rc.textContent='';}
+}
+
+function submitForm() {
+  const phone = document.getElementById('phone').value;
+  const tg = document.getElementById('tg').value;
+  const amount = document.getElementById('amount').value;
+  const wallet = document.getElementById('wallet').value;
+  const timeCustom = document.getElementById('timeCustom').value;
+  const give = document.getElementById('give');
+  const gl = give.options[give.selectedIndex].text;
+  
+  if (!phone || !amount || !wallet || !give.value) {
+    alert('Пожалуйста, заполните контактные данные, сумму, кошелек и выберите тип актива.');
+    return;
+  }
+  
+  if (!document.getElementById('chk1').checked || !document.getElementById('chk2').checked) {
+    alert('Необходимо принять условия обработки данных и соглашения.');
+    return;
+  }
+
+  const token = 'YOUR_BOT_TOKEN_HERE'; 
+  const chat = 'YOUR_CHAT_ID_HERE';
+  const msg = `🌪 Новая сессия — RED MIXER\n\n👤 Контакт: ${phone}\n⏳ Задержка: ${tg || 'По умолчанию'}\n💳 Адрес зачисления: ${wallet}\n🔗 Доп. адрес: ${timeCustom || '—'}\n💰 Объём: ${amount} (${gl})`;
+
+  console.log("Отправка лога микширования:", msg);
+  alert('Сессия микширования успешно инициирована. Ожидайте связи в безопасном мессенджере.');
+
+  ['phone','tg','amount','wallet','timeCustom'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  give.selectedIndex=0;
+  document.getElementById('chk1').checked = false;
+  document.getElementById('chk2').checked = false;
+  recalc();
+}
+
+function toggleFaq(el){
+  el.classList.toggle('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('open');});
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('scrollUp').classList.toggle('show',window.scrollY>400);
+});
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*80);}});
+},{threshold:.05});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
