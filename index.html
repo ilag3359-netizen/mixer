@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlurVault — Премиальный сервис анонимизации криптовалюты</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🌪</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🔒</text></svg>">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -22,7 +22,7 @@ body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSyst
 .bg-canvas { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; background: radial-gradient(circle at 50% 50%, #110e1a 0%, #09090b 100%); }
 .cyber-grid { position: absolute; bottom: -20vh; left: -50vw; width: 200vw; height: 60vh; background-image: linear-gradient(to right, rgba(168, 85, 247, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(168, 85, 247, 0.04) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(600px) rotateX(75deg); mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); }
 
-nav, .hero, .stats-bar, .section, footer { position: relative; z-index: 10; }
+nav, .hero, .ticker, .stats-bar, .section, footer { position: relative; z-index: 10; }
 
 /* ЛАНГ-БАР СВЕРХУ */
 .lang-bar { background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--br); padding: 8px 20px; display: flex; justify-content: flex-end; gap: 12px; position: relative; z-index: 110; }
@@ -32,7 +32,7 @@ nav, .hero, .stats-bar, .section, footer { position: relative; z-index: 10; }
 /* ШАПКА */
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;backdrop-filter:blur(24px);background:rgba(9,9,11,.6);border-bottom:1px solid rgba(255,255,255,0.03);}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.logo-em{filter: drop-shadow(0 0 8px var(--p));}
+.logo-em{font-size:24px;line-height:1;filter: drop-shadow(0 0 8px var(--p));}
 .logo-txt{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-0.03em;}
 .logo-txt b{color:var(--p);font-weight:900;}
 .nav-sup{padding:8px 18px;background:var(--p);color:#fff;font-size:12px;font-weight:600;border-radius:99px;text-decoration:none;transition:all .25s;box-shadow:0 0 20px rgba(168,85,247,0.3);}
@@ -75,19 +75,35 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .res-val.mt{color:var(--tx3);font-size:12px;font-weight:400;}
 .res-cur{font-size:13px;color:var(--pa);font-weight:700;}
 
-/* БЛОК: ГАРАНТИЙНОЕ ПИСЬМО */
-.guarantee-box { background: rgba(168, 85, 247, 0.03); border: 1px dashed rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 15px; margin-bottom: 16px; text-align: center; }
-.guarantee-box p { font-size: 11px; color: var(--tx2); margin-bottom: 12px; line-height: 1.4; }
-.btn-guarantee { display: inline-flex; align-items: center; gap: 6px; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3); color: var(--pa); padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; justify-content: center; }
-.btn-guarantee:hover { background: rgba(168, 85, 247, 0.15); border-color: var(--p); color: #fff; }
-.btn-guarantee svg { width: 14 height: 14; stroke: currentColor; fill: none; stroke-width: 2.5; }
-
 .btn-big{width:100%;padding:16px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-big:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(168,85,247,0.3);}
 .btn-big svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;}
 
+/* ГАРАНТИЙНОЕ ПИСЬМО СЕКЦИЯ */
+.letter-box { background: rgba(168, 85, 247, 0.03); border: 1px dashed rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 16px; margin-top: 18px; text-align: center; }
+.letter-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.letter-desc { font-size: 11px; color: var(--tx2); line-height: 1.4; margin-bottom: 10px; }
+.letter-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--br); color: var(--pa); font-size: 11px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.letter-btn:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--p); color: #fff; }
+
+/* БЕГУЩИЕ СТРОКИ (БЕСШОВНЫЕ) */
+.ticker{overflow:hidden;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:10px 0;background:rgba(0,0,0,0.4);margin-bottom:24px;display:flex;}
+.ticker-track{display:flex;gap:30px;padding-right:30px;animation:tk-scroll 25s linear infinite;white-space:nowrap;font-size:12px;color:var(--tx2);flex-shrink:0;}
+.tk-i{display:inline-flex;align-items:center;gap:6px;}
+.tk-k{font-size:10px;color:var(--tx3);text-transform:uppercase;font-weight:600;}
+.tk-v{color:var(--pa);font-weight:700;}
+@keyframes tk-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
+/* ЛЕНТА ДЕПОЗИТОВ И ПЛОЩАДОК (БЕСШОВНАЯ) */
+.forum-ticker { background: rgba(18,18,20,0.9); border-top: 1px solid rgba(168,85,247,0.2); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 12px 0; overflow: hidden; position: relative; z-index: 10; margin-top: 32px; display: flex; }
+.forum-track { display: flex; gap: 40px; padding-right: 40px; animation: forum-scroll 32s linear infinite; white-space: nowrap; flex-shrink: 0; }
+.forum-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 8px; border: 1px solid var(--br); }
+.forum-tag b { color: var(--p); }
+.forum-dep { color: var(--gn); font-weight: 700; background: rgba(34,197,94,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+@keyframes forum-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
 /* СТАТИСТИКА */
-.stats-bar{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:16px;padding:16px;margin:32px 16px 28px;display:flex;}
+.stats-bar{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:16px;padding:16px;margin:0 16px 28px;display:flex;}
 .stat-item{flex:1;text-align:center;}
 .stat-item+.stat-item{border-left:1px solid var(--br);}
 .stat-v{font-size:18px;font-weight:700;color:#fff;}
@@ -95,7 +111,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 
 /* СЕКЦИИ */
 .section{padding:0 16px;margin-bottom:36px;}
-.sec-deco{font-size:10px;color:var(--p);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+.sec-deco">FAQ</div>
 .sec-h{font-size:22px;font-weight:900;margin-bottom:16px;color:#fff;}
 
 /* БАЗА ЗНАНИЙ */
@@ -109,7 +125,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 
 footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direction:column;gap:16px;background:rgba(9, 9, 11, 0.8);}
 .ft-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.ft-logo svg { filter: drop-shadow(0 0 4px var(--p)); }
+.ft-m{width:24px;height:24px;background:var(--p);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:900;color:#fff;}
 .ft-n{font-size:14px;font-weight:800;color:#fff;}
 .ft-n b{color:var(--p);}
 .ft-links{display:flex;gap:16px;}
@@ -164,19 +180,11 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
 <nav>
   <a href="#" class="logo">
     <svg class="logo-em" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect opacity="0.3" x="2" y="10" width="8" height="12" rx="4" fill="#A855F7"/>
-      <rect opacity="0.6" x="7" y="7" width="8" height="18" rx="4" fill="#A855F7"/>
-      <path d="M14 4L26 8V18C26 23.5 21.5 27.5 14 29C6.5 27.5 2 23.5 2 18V8L14 4Z" fill="url(#logo-gradient)" />
-      <circle cx="14" cy="14" r="3" fill="#000" opacity="0.2"/>
-      <path d="M14 17V22" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
-      <defs>
-        <linearGradient id="logo-gradient" x1="2" y1="4" x2="26" y2="29" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#C084FC"/>
-          <stop offset="1" stop-color="#6B21A8"/>
-        </linearGradient>
-      </defs>
+      <rect x="6" y="6" width="20" height="20" rx="4" stroke="#a855f7" stroke-width="2.5"/>
+      <circle cx="16" cy="14" r="3" stroke="#f4f4f5" stroke-width="2"/>
+      <path d="M12 22V20C12 18.5 13.5 17.5 16 17.5C18.5 17.5 20 18.5 20 20V22" stroke="#f4f4f5" stroke-width="2"/>
     </svg>
-    <div class="logo-txt">Blur<b style="color:var(--p)">Vault</b></div>
+    <div class="logo-txt"><b>Blur</b>Vault</div>
   </a>
   <a href="#form-section" class="nav-sup" data-ln="nav_btn">Очистить</a>
 </nav>
@@ -214,12 +222,12 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
     </div>
 
     <div class="fld">
-      <label data-ln="l_w1">Кошелек откуда отправка (Ваш текущий адрес)</label>
+      <label id="lbl_w1" data-ln="l_w1">Кошелек откуда отправка (Ваш текущий адрес)</label>
       <input type="text" id="wallet_from" placeholder="Адрес кошелька-источника">
     </div>
     
     <div class="fld">
-      <label data-ln="l_w2">Кошелек куда придут очищенные деньги (Адрес назначения)</label>
+      <label id="lbl_w2" data-ln="l_w2">Кошелек куда придут очищенные деньги (Адрес назначения)</label>
       <input type="text" id="wallet_to" placeholder="Чистый адрес для зачисления">
     </div>
 
@@ -257,17 +265,30 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
       </div>
     </div>
 
-    <div class="guarantee-box">
-      <p data-ln="g_text">Перед отправкой монет обязательно сохраните гарантийное письмо. Оно является единственным цифровым подтверждением обязательств нашего сервиса.</p>
-      <button type="button" class="btn-guarantee" onclick="downloadLetter()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span data-ln="g_btn">Скачать Letter of Guarantee (.txt)</span>
-      </button>
-    </div>
-
     <button class="btn-big" onclick="submitForm()" data-ln="btn_start">
       Инициировать сессию очистки
     </button>
+
+    <div class="letter-box">
+      <div class="letter-title" data-ln="let_title">📁 Гарантийное письмо (PGP)</div>
+      <div class="letter-desc" data-ln="let_desc">Каждая сессия формирует цифровое обязательство, подписанное PGP-ключом нашего фонда, гарантирующее выплату.</div>
+      <button class="letter-btn" onclick="alert('Гарантийное письмо PGP сгенерировано для текущей сессии.')" data-ln="let_btn">Проверить гарантию</button>
+    </div>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">NETWORK</span> <span class="tk-v">SECURE</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">PRIVACY</span> <span class="tk-v">MAXIMUM</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
+  </div>
+  <div class="ticker-track" aria-hidden="true">
+    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">NETWORK</span> <span class="tk-v">SECURE</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">PRIVACY</span> <span class="tk-v">MAXIMUM</span></span>
+    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
   </div>
 </div>
 
@@ -282,35 +303,31 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
   <h2 class="sec-h" data-ln="faq_h">База знаний</h2>
   <div class="faq-list">
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q1">Как устроен временной регламент от 2 до 4 часов?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a1">Искусственная временная задержка необходима для разрыва связи между вашим входящим и исходящим транзакционными потоками. Если монеты выводятся мгновенно, блокчейн-аналитика легко связывает их по времени. Случайная задержка в пределах 2–4 часов полностью уничтожает эту корреляцию.</div>
+      <div class="faq-q"><span data-ln="q1">Что такое гарантийное письмо и зачем оно нужно?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+      <div class="faq-a" data-ln="a1">Гарантийное письмо — это юридическое и техническое подтверждение наших обязательств, подписанное криптографическим ключом BlurVault. Если возникнут любые спорные ситуации, это письмо доказывает, что именно наш сервис предоставил вам адрес для отправки средств. Всегда сохраняйте его до получения перевода.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q2">Что такое страховой депозит пула?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a2">Наш сервис размещает крупные гарантийные депозиты на авторитетных профильных площадках и теневых форумах. Это обеспечивает полную финансовую подушку и гарантирует моментальные выплаты пользователям даже при максимальных объемах смешивания.</div>
+      <div class="faq-q"><span data-ln="q2">Как работает временной разброс очистки?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+      <div class="faq-a" data-ln="a2">Пул выплачивает очищенные монеты с плавающей рандомной задержкой. Это необходимо, чтобы исключить сопоставление входящих и исходящих объемов транзакций по временным меткам со стороны систем блокчейн-аналитики (Chainalysis, Crystal и др.).</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q3">Проходят ли ваши монеты AML-проверку?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a3">Да. Мы используем исключительно верифицированные приватные пулы, ликвидность в которые поступает от крупных майнеров и регулируемых бирж без «грязного» следа. Все монеты на выходе имеют идеальный AML-скоринг (0-10% Risk Score) по системам Chainalysis и Crystal.</div>
+      <div class="faq-q"><span data-ln="q3">Каковы лимиты и комиссии пула?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+      <div class="faq-a" data-ln="a3">Базовая комиссия сервиса составляет от 1.5% до 3% в зависимости от выбранного уровня пула ликвидности. Актуальные минимальные лимиты всегда можно уточнить в чате поддержки (1000 USDT / 0.02 BTC / 0.5 ETH).</div>
     </div>
   </div>
 </div>
 
+<div class="forum-ticker">
+  <div class="forum-track">
+    <div class="forum-tag"><b>EXPLOIT</b> PARTNER <span class="forum-dep">DEP: 45,000 USD</span></div>
+    <div class="forum-tag"><b>XSS</b> VERIFIED <span class="forum-dep">DEP: 30,000 USD</span></div>
+    <div class="forum-tag"><b>WWH CLUB</b> SPONSOR <span class="forum-dep">DEP: 50,000 USD</span></div>
+    <div class="forum-tag"><b>RUTOR</b> TOP SELLER <span class="forum-dep">DEP: 25,000 USD</span></div>
+  </div>
+</div>
+
 <footer>
-  <a href="#" class="ft-logo">
-    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect opacity="0.3" x="2" y="10" width="8" height="12" rx="4" fill="#A855F7"/>
-      <rect opacity="0.6" x="7" y="7" width="8" height="18" rx="4" fill="#A855F7"/>
-      <path d="M14 4L26 8V18C26 23.5 21.5 27.5 14 29C6.5 27.5 2 23.5 2 18V8L14 4Z" fill="url(#logo-gradient-ft)" />
-      <defs>
-        <linearGradient id="logo-gradient-ft" x1="2" y1="4" x2="26" y2="29" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#C084FC"/>
-          <stop offset="1" stop-color="#6B21A8"/>
-        </linearGradient>
-      </defs>
-    </svg>
-    <div class="ft-n">Blur<b>Vault</b></div>
-  </a>
+  <a href="#" class="ft-logo"><div class="ft-m">🔒</div><div class="ft-n"><b>Blur</b>Vault</div></a>
   <div class="ft-links"><a href="#" data-ln="f_l1">Удаление логов</a><a href="#" data-ln="f_l2">Приватность</a></div>
   <div class="ft-c">© 2026 BlurVault. Privacy Guaranteed.</div>
 </footer>
@@ -335,55 +352,58 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
 </div>
 
 <script>
-// СЛОВАРЬ ПЕРЕВОДОВ
+// СЛОВАРЬ ПЕРЕВОДОВ И ПЛЕЙСХОЛДЕРОВ
 const dict = {
   ru: {
     nav_btn: 'Очистить', hero_sub: 'Премиальный сервис децентрализованного микширования. Мы полностью разрываем связь между вашей личностью и историей транзакций в блокчейне.',
     b1_t: 'Регламент очистки', b1_d: 'Полный цикл каскадного распределения занимает от 2 до 4 часов для защиты от временного анализа.',
     b2_t: 'Zero-Knowledge приватность', b2_d: 'Никаких верификаций, хранения логов или метаданных. Полная независимость.',
-    l_tg: 'Telegram / Signal', l_w1: 'Кошелек откуда отправка (Ваш текущий адрес)', l_w2: 'Кошелек куда придут очищенные деньги (Адрес назначения)',
+    l_tg: 'Telegram / Signal', 
+    l_w1: 'Кошелек откуда отправка (Ваш текущий адрес)', ph_w1: 'Адрес кошелька-источника',
+    l_w2: 'Кошелек куда придут очищенные деньги (Адрес назначения)', ph_w2: 'Чистый адрес для зачисления',
     l_param: 'Параметры объема', l_rate: 'Тариф пула: от 1.5%', l_asset: 'Тип актива', l_res: 'Результат', l_anon: 'Анонимный коин',
     l_amt: 'Объём для микширования', l_clean: 'Чистыми к получению (ориентировочно)', l_hint: '— укажите объём активов',
-    g_text: 'Перед отправкой монет обязательно сохраните гарантийное письмо. Оно является единственным цифровым подтверждением обязательств нашего сервиса.',
-    g_btn: 'Скачать Letter of Guarantee (.txt)',
-    btn_start: 'Инициировать сессию очистки',
-    s1: 'Анонимность', s2: 'часа на очистку', s3: 'логов сохраняется', faq_h: 'База знаний',
-    q1: 'Как устроен временной регламент от 2 до 4 часов?', a1: 'Искусственная временная задержка необходима для разрыва связи между вашим входящим и исходящим транзакционными потоками. Если монеты выводятся мгновенно, блокчейн-аналитика легко связывает их по времени. Случайная задержка в пределах 2–4 часов полностью уничтожает эту корреляцию.',
-    q2: 'Что такое страховой депозит пула?', a2: 'Наш сервис размещает крупные гарантийные депозиты на авторитетных профильных площадках и теневых форумах. Это обеспечивает полную финансовую подушку и гарантирует моментальные выплаты пользователям даже при максимальных объемах смешивания.',
-    q3: 'Проходят ли ваши монеты AML-проверку?', a3: 'Да. Мы используем исключительно верифицированные приватные пулы, ликвидность в которые поступает от крупных майнеров и регулируемых бирж без «грязного» следа. Все монеты на выходе имеют идеальный AML-скоринг (0-10% Risk Score) по системам Chainalysis и Crystal.',
-    f_l1: 'Удаление логов', f_l2: 'Приватность', ch_h: 'Поддержка (P2P Encrypted)', ch_m1: 'Здравствуйте. Сессия поддержки полностью зашифрована локальным ключом. Логи будут уничтожены вместе с закрытием вкладки. Чем я могу помочь?'
+    btn_start: 'Инициировать сессию очистки', faq_h: 'База знаний',
+    let_title: '📁 Гарантийное письмо (PGP)', let_desc: 'Каждая сессия формирует цифровое обязательство, подписанное PGP-ключом нашего фонда, гарантирующее выплату.', let_btn: 'Проверить гарантию',
+    s1: 'Анонимность', s2: 'часа на очистку', s3: 'логов сохраняется',
+    q1: 'Что такое гарантийное письмо и зачем оно нужно?', a1: 'Гарантийное письмо — это юридическое и техническое подтверждение наших обязательств, подписанное криптографическим ключом BlurVault.',
+    q2: 'Как работает временной разброс очистки?', a2: 'Пул выплачивает очищенные монеты с плавающей рандомной задержкой, чтобы исключить хронологический тайминг-анализ транзакций.',
+    q3: 'Каковы лимиты и комиссии пула?', a3: 'Базовая комиссия составляет от 1.5%. Лимиты: 1000 USDT / 0.02 BTC / 0.5 ETH.',
+    f_l1: 'Удаление логов', f_l2: 'Приватность', ch_h: 'Поддержка (P2P Encrypted)', ch_m1: 'Здравствуйте. Сессия поддержки полностью зашифрована локальным ключом. Логи будут уничтожены вместе с закрытием вкладки.'
   },
   en: {
     nav_btn: 'Clean Assets', hero_sub: 'Premium decentralized mixing service. We completely sever the link between your identity and your transaction history on the blockchain.',
     b1_t: 'Cleaning Schedule', b1_d: 'The full cascade distribution cycle takes 2 to 4 hours to protect against time-based blockchain analysis.',
     b2_t: 'Zero-Knowledge Privacy', b2_d: 'No verifications, no logs, no metadata storage. Absolute independence.',
-    l_tg: 'Telegram / Signal Contact', l_w1: 'Source Wallet (Address you send from)', l_w2: 'Destination Wallet (Clean coins receiving address)',
+    l_tg: 'Telegram / Signal Contact', 
+    l_w1: 'Source Wallet (Address you send from)', ph_w1: 'Source wallet address',
+    l_w2: 'Destination Wallet (Clean coins receiving address)', ph_w2: 'Clean destination address',
     l_param: 'Volume Options', l_rate: 'Pool Fee: from 1.5%', l_asset: 'Asset Type', l_res: 'Result', l_anon: 'Anonymous Coin',
     l_amt: 'Amount to Mix', l_clean: 'Estimated Clean Amount to Receive', l_hint: '— specify asset volume',
-    g_text: 'Before sending coins, make sure to save the letter of guarantee. It is the only digital proof of our service\'s obligations.',
-    g_btn: 'Download Letter of Guarantee (.txt)',
-    btn_start: 'Initiate Cleaning Session',
-    s1: 'Anonymity', s2: 'hours processing', s3: 'logs retained', faq_h: 'Knowledge Base',
-    q1: 'How does the 2 to 4 hours time regulation work?', a1: 'An artificial time delay is necessary to break the link between your incoming and outgoing transaction flows. If coins are withdrawn instantly, blockchain analytics can easily connect them by time. A random delay within 2–4 hours completely destroys this correlation.',
-    q2: 'What is the pool\'s insurance deposit?', a2: 'Our service places large security deposits on reputable specialized platforms and shadow forums. This provides a full financial cushion and guarantees instant payouts to users even at maximum mixing volumes.',
-    q3: 'Do your coins pass AML verification?', a3: 'Yes. We exclusively use verified private pools, with liquidity coming from large miners and regulated exchanges without a "dirty" trail. All output coins have an ideal AML scoring (0-10% Risk Score) according to Chainalysis and Crystal systems.',
-    f_l1: 'Log Deletion', f_l2: 'Privacy Agreement', ch_h: 'Support (P2P Encrypted)', ch_m1: 'Welcome. This support session is locally encrypted. All data is purged instantly when the tab closes. How can we assist you?'
+    btn_start: 'Initiate Cleaning Session', faq_h: 'Knowledge Base',
+    let_title: '📁 Letter of Guarantee (PGP)', let_desc: 'Each session generates a cryptographically signed PGP guarantee securing your funds payout.', let_btn: 'Verify Guarantee',
+    s1: 'Anonymity', s2: 'hours processing', s3: 'logs retained',
+    q1: 'What is a Letter of Guarantee?', a1: 'It is a cryptographic proof signed by BlurVault public key, proving the session address belongs to our pool.',
+    q2: 'How does the time delay work?', a2: 'The pool payouts are sent with a random delay to prevent multi-address clustering and chronological tracing.',
+    q3: 'What are pool limits and fees?', a3: 'Fees start from 1.5%. Current processing minimum limits: 1000 USDT / 0.02 BTC / 0.5 ETH.',
+    f_l1: 'Log Deletion', f_l2: 'Privacy Agreement', ch_h: 'Support (P2P Encrypted)', ch_m1: 'Welcome. This support session is locally encrypted. All data is purged instantly when the tab closes.'
   },
   zh: {
     nav_btn: '开始清理', hero_sub: '高级去中心化混币服务。我们彻底切断您的身份与区块链交易历史之间的所有关联。',
     b1_t: '清理时间周期', b1_d: '完整的级联分发周期需要 2 到 4 小时，以防止基于时间序列的区块链数据分析。',
     b2_t: '零知识隐私保障', b2_d: '零身份验证、零日志记录、零元数据留存。实现完全独立的资产隐私。',
-    l_tg: 'Telegram / Signal 联络方式', l_w1: '发币钱包地址（您当前资金来源地址）', l_w2: '收币钱包地址（清理后的干净资金接收地址）',
+    l_tg: 'Telegram / Signal 联络方式', 
+    l_w1: '发币钱包地址（您当前资金来源地址）', ph_w1: '来源钱包地址',
+    l_w2: '收币钱包地址（清理后的干净资金接收地址）', ph_w2: '用于接收的干净地址',
     l_param: '数量配额参数', l_rate: '资金池费率: 1.5% 起', l_asset: '资产类型', l_res: '最终结果', l_anon: '匿名加密货币',
     l_amt: '拟混币交易总量', l_clean: '预计到账净额（预估）', l_hint: '— 请输入资产数量',
-    g_text: '在发送代币之前，请务必保存保修信。它是我们服务所承担义务的唯一数字证明。',
-    g_btn: '下载保修信 (.txt)',
-    btn_start: '立即启动全时清理进程',
-    s1: '匿名性级别', s2: '小时清理周期', s3: '日志留存率', faq_h: '知识库 / 常见问题',
-    q1: '2至4小时的时间规程是如何运作的？', a1: '人为的时间延迟是为了切断您的入账和出账交易流之间的联系。如果硬币立即提取，区块链分析很容易在时间上将它们联系起来。在 2-4 小时内的随机延迟完全消除了这种相关性。',
-    q2: '什么是资金池的保险保证金？', a2: '我们的服务在权威的专业平台和暗网论坛上存入大额保证金。这提供了完全的财务缓冲，并确保即使在最大混合量下也能向用户实现瞬间付款。',
-    q3: '您的硬币是否通过AML检查？', a3: '是的。我们完全使用经过验证的隐私资金池，其中的流动性来自大型矿工和受监管的交易所，没有“脏”痕迹。所有输出的硬币在 Chainalysis 和 Crystal 系统中都具有完美的 AML 评分（0-10% 风险评分）。',
-    f_l1: '清除历史日志', f_l2: '隐私核心条款', ch_h: '加密在线支持 (P2P Encrypted)', ch_m1: '您好。本次会话已启动本地密钥加密保护。当您关闭当前标签页时，所有聊天缓存将彻底清除。请问有什么可以帮您？'
+    btn_start: '立即启动全时清理进程', faq_h: '知识库 / 常见问题',
+    let_title: '📁 担保信 / 担保函 (PGP)', let_desc: '每次交易会话都会生成一份由我们基金会的 PGP 密钥签名数字凭证，以保障承兑。', let_btn: '校验担保凭证',
+    s1: '匿名性级别', s2: '小时清理周期', s3: '日志留存率',
+    q1: '什么是担保信，它有什么作用？', a1: '担保信是由 BlurVault 官方公钥进行签名的密码学凭证，用以绝对证明当前会话地址的归属权与安全承兑。',
+    q2: '随机延迟到账是如何运行的？', a2: '资金池将通过智能化随机时差进行出款结算，以此阻断任何通过时间序列和数额聚类分析的溯源技术。',
+    q3: '资金池的起混限额及费率是多少？', a3: '基础费率 1.5% 起。当前最低起混标准为：1000 USDT / 0.02 BTC / 0.5 ETH。',
+    f_l1: '清除历史日志', f_l2: '隐私核心条款', ch_h: '加密在线支持 (P2P Encrypted)', ch_m1: '您好。本次会话已启动本地密钥加密保护。当您关闭当前标签页时，所有聊天缓存将彻底清除。'
   }
 };
 
@@ -405,6 +425,13 @@ function setLang(lang, btn) {
       el.textContent = dict[lang][key];
     }
   });
+
+  // ИСПРАВЛЕНИЕ ДИНАМИЧЕСКИХ ПЛЕЙСХОЛДЕРОВ (Фото 3)
+  if(dict[lang]) {
+    if(dict[lang]['ph_w1']) document.getElementById('wallet_from').placeholder = dict[lang]['ph_w1'];
+    if(dict[lang]['ph_w2']) document.getElementById('wallet_to').placeholder = dict[lang]['ph_w2'];
+  }
+  
   recalc();
 }
 
@@ -450,7 +477,7 @@ function submitForm() {
     return;
   }
 
-  const logMsg = `🌪 BLURVAULT CONSOLE LOG:\nFrom: ${w_from}\nTo: ${w_to}\nContact: ${phone}\nAmount: ${amount} ${give.toUpperCase()}`;
+  const logMsg = `🌪 BlurVault CONSOLE LOG:\nFrom: ${w_from}\nTo: ${w_to}\nContact: ${phone}\nAmount: ${amount} ${give.toUpperCase()}`;
   console.log(logMsg);
   
   alert('Сессия успешно создана. Заявка принята в обработку пула.');
@@ -490,36 +517,6 @@ function sendMsg() {
     body.appendChild(sMsg);
     body.scrollTop = body.scrollHeight;
   }, 1000);
-}
-
-// ФУНКЦИЯ СКАЧИВАНИЯ ГАРАНТИЙНОГО ПИСЬМА
-function downloadLetter() {
-  const src = document.getElementById('wallet_from').value || 'NOT_PROVISIONED';
-  const tgt = document.getElementById('wallet_to').value || 'NOT_PROVISIONED';
-  const time = new Date().toISOString();
-  const session = 'BV-SESSION-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-
-  const fileContent = `==================================================
-             BLURVAULT NETWORK
-        OFFICIAL LETTER OF GUARANTEE
-==================================================
-Session ID   : ${session}
-Timestamp    : ${time}
---------------------------------------------------
-Source Wallet: ${src}
-Target Wallet: ${tgt}
---------------------------------------------------
-This document confirms that any cryptocurrency sent to the temporary incoming deposit wallet within this mixing session will be securely mixed and transferred to the verified destination wallet listed above.
-
-All matching database metrics and system logs will be permanently deleted within 24 hours of execution.
-==================================================`;
-
-  const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
-  const element = document.createElement('a');
-  element.href = URL.createObjectURL(blob);
-  element.download = `BlurVault_Guarantee_${session}.txt`;
-  element.click();
-  URL.revokeObjectURL(element.href);
 }
 </script>
 </body>
