@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BlurVault — Конфиденциальные Транзакции</title>
+  <title>BlurVault — Crypto Mixer</title>
   <style>
-    /* Базовые стили и обнуление */
+    /* Оригинальная стилистика и цветовая палитра */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,7 +14,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, #0d0e12 0%, #151821 100%);
+      background: #0d0e12;
       color: #e2e8f0;
       min-height: 100vh;
       padding: 20px;
@@ -23,14 +23,15 @@
       align-items: center;
     }
 
-    /* Переключение языков через классы body */
-    body.lang-ru .lang-zh { display: none !important; }
-    body.lang-zh .lang-ru { display: none !important; }
+    /* ТРЕХЪЯЗЫЧНОЕ ПЕРЕКЛЮЧЕНИЕ (Исключает наложение текста) */
+    body.lang-ru .lang-zh, body.lang-ru .lang-en { display: none !important; }
+    body.lang-zh .lang-ru, body.lang-zh .lang-en { display: none !important; }
+    body.lang-en .lang-ru, body.lang-en .lang-zh { display: none !important; }
 
-    /* Шапка и Логотип */
+    /* Шапка сайта */
     header {
       width: 100%;
-      max-width: 650px;
+      max-width: 600px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -38,28 +39,28 @@
       padding: 10px 0;
     }
 
+    /* Брендинг BlurVault */
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 24px;
+      gap: 10px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: -0.5px;
       color: #ffffff;
     }
 
     .logo-text span {
-      color: #a855f7; /* Неоновый фиолетовый акцент */
+      color: #a855f7;
     }
 
     .lang-switcher {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .lang-btn {
-      background: #1e2230;
-      border: 1px solid #333a50;
+      background: #161a26;
+      border: 1px solid #242b42;
       color: #94a3b8;
       padding: 6px 12px;
       border-radius: 6px;
@@ -74,195 +75,175 @@
       color: #fff;
     }
 
-    body.lang-ru .btn-ru, body.lang-zh .btn-zh {
+    body.lang-ru .btn-ru, 
+    body.lang-zh .btn-zh,
+    body.lang-en .btn-en {
       background: #a855f7;
       border-color: #a855f7;
       color: #fff;
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
     }
 
-    /* Основной контейнер формы */
-    .main-card {
+    /* Главная панель */
+    .mixer-panel {
       background: #11141d;
       border: 1px solid #1e2333;
-      border-radius: 16px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 650px;
-      padding: 30px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      margin-bottom: 30px;
+      max-width: 600px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      margin-bottom: 25px;
     }
 
-    .card-title {
-      font-size: 20px;
+    .panel-title {
+      font-size: 18px;
       font-weight: 600;
-      margin-bottom: 25px;
-      text-align: center;
+      margin-bottom: 20px;
       color: #fff;
     }
 
-    /* Поля ввода */
-    .input-field-group {
-      margin-bottom: 20px;
+    /* Поля формы */
+    .input-group {
+      margin-bottom: 18px;
     }
 
-    .field-label {
+    .input-label {
       display: block;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #94a3b8;
       margin-bottom: 8px;
-      font-weight: 500;
     }
 
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper input {
+    .input-group input {
       width: 100%;
       background: #161a26;
       border: 1px solid #242b42;
-      border-radius: 10px;
-      padding: 14px 16px;
+      border-radius: 8px;
+      padding: 12px 14px;
       color: #fff;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
-      transition: all 0.2s;
+      transition: border-color 0.2s;
     }
 
-    .input-wrapper input:focus {
+    .input-group input:focus {
       border-color: #a855f7;
-      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
     }
 
-    /* Гарантийное письмо */
-    .guarantee-box {
-      background: rgba(168, 85, 247, 0.04);
-      border: 1px dashed rgba(168, 85, 247, 0.3);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 25px 0;
+    /* Блок: Гарантийное письмо */
+    .guarantee-container {
+      background: rgba(168, 85, 247, 0.03);
+      border: 1px dashed rgba(168, 85, 247, 0.25);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px 0;
       text-align: center;
     }
 
-    .guarantee-box p {
-      font-size: 13.5px;
-      line-height: 1.5;
-      color: #cbd5e1;
-      margin-bottom: 15px;
+    .guarantee-container p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+      line-height: 1.4;
     }
 
-    .btn-download {
+    .btn-guarantee {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: #1e1b2e;
+      gap: 6px;
+      background: #1a1526;
       border: 1px solid #582092;
       color: #c084fc;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
       font-weight: 600;
-      font-size: 14px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .btn-download:hover {
-      background: #2e224d;
-      color: #e9d5ff;
+    .btn-guarantee:hover {
+      background: #251b3a;
       border-color: #a855f7;
     }
 
     /* Главная кнопка действия */
-    .btn-submit {
+    .btn-action {
       width: 100%;
       background: #a855f7;
-      color: #ffffff;
+      color: #fff;
       border: none;
-      padding: 16px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 700;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+      transition: background 0.2s;
     }
 
-    .btn-submit:hover {
+    .btn-action:hover {
       background: #9333ea;
     }
 
-    .btn-submit:active {
-      transform: scale(0.99);
-    }
-
     /* Блок FAQ (Вопрос-Ответ) */
-    .faq-section {
+    .faq-container {
       width: 100%;
-      max-width: 650px;
+      max-width: 600px;
       margin-top: 10px;
     }
 
-    .faq-section h2 {
-      font-size: 18px;
-      font-weight: 600;
+    .faq-container h3 {
+      font-size: 16px;
       color: #fff;
-      margin-bottom: 15px;
-      padding-left: 5px;
+      margin-bottom: 12px;
     }
 
-    .faq-item {
+    .faq-row {
       background: #11141d;
       border: 1px solid #1e2333;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
 
-    .faq-trigger {
+    .faq-head {
       width: 100%;
       background: none;
       border: none;
       color: #f1f5f9;
-      padding: 16px 20px;
+      padding: 14px 18px;
       text-align: left;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.2s;
     }
 
-    .faq-trigger:hover {
-      background: #161a26;
-    }
-
-    .faq-trigger::after {
+    .faq-head::after {
       content: '▼';
       font-size: 10px;
       color: #64748b;
       transition: transform 0.2s;
     }
 
-    .faq-item.active .faq-trigger::after {
+    .faq-row.open .faq-head::after {
       transform: rotate(180deg);
       color: #a855f7;
     }
 
-    .faq-content {
+    .faq-body {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background: #141822;
+      transition: max-height 0.25s ease-out;
+      background: #141722;
     }
 
-    .faq-content-inner {
-      padding: 16px 20px;
-      font-size: 14px;
-      line-height: 1.6;
+    .faq-body-content {
+      padding: 14px 18px;
+      font-size: 13.5px;
+      line-height: 1.5;
       color: #94a3b8;
       border-top: 1px solid #1e2333;
     }
@@ -272,7 +253,7 @@
 
   <header>
     <div class="logo-container">
-      <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect opacity="0.3" x="2" y="10" width="8" height="12" rx="4" fill="#A855F7"/>
         <rect opacity="0.6" x="7" y="7" width="8" height="18" rx="4" fill="#A855F7"/>
         <path d="M14 4L26 8V18C26 23.5 21.5 27.5 14 29C6.5 27.5 2 23.5 2 18V8L14 4Z" fill="url(#logo-gradient)" />
@@ -289,87 +270,96 @@
     </div>
 
     <div class="lang-switcher">
-      <button class="lang-btn btn-ru" onclick="changeLang('ru')">RU</button>
-      <button class="lang-btn btn-zh" onclick="changeLang('zh')">ZH</button>
+      <button class="lang-btn btn-ru" onclick="toggleLanguage('ru')">RU</button>
+      <button class="lang-btn btn-en" onclick="toggleLanguage('en')">EN</button>
+      <button class="lang-btn btn-zh" onclick="toggleLanguage('zh')">ZH</button>
     </div>
   </header>
 
-  <main class="main-card">
-    <div class="card-title">
-      <span class="lang-ru">Инициация микширования</span>
+  <main class="mixer-panel">
+    <div class="panel-title">
+      <span class="lang-ru">Инициировать сессию очистки</span>
+      <span class="lang-en">Initiate Mixing Session</span>
       <span class="lang-zh">发起混合会话</span>
     </div>
 
-    <div class="input-field-group">
-      <label class="field-label lang-ru">Адрес кошелька-источника</label>
-      <label class="field-label lang-zh">发币钱包地址（您当前资金来源地址）</label>
-      <div class="input-wrapper">
-        <input type="text" id="source_addr" placeholder="TXXXXXXX...">
-      </div>
+    <div class="input-group">
+      <label class="input-label lang-ru">Адрес кошелька-источника</label>
+      <label class="input-label lang-en">Source Wallet Address</label>
+      <label class="input-label lang-zh">发币钱包地址（您当前资金来源地址）</label>
+      <input type="text" id="source" placeholder="TXXXXXXX...">
     </div>
 
-    <div class="input-field-group">
-      <label class="field-label lang-ru">Чистый адрес для зачисления</label>
-      <label class="field-label lang-zh">收币钱包地址（清理后的干净资金接收地址）</label>
-      <div class="input-wrapper">
-        <input type="text" id="target_addr" placeholder="TXXXXXXX...">
-      </div>
+    <div class="input-group">
+      <label class="input-label lang-ru">Чистый адрес для зачисления</label>
+      <label class="input-label lang-en">Clean Address for Credit</label>
+      <label class="input-label lang-zh">收币钱包地址（清理后的干净资金接收地址）</label>
+      <input type="text" id="target" placeholder="TXXXXXXX...">
     </div>
 
-    <div class="guarantee-box">
+    <div class="guarantee-container">
       <p class="lang-ru">Перед отправкой монет обязательно сохраните гарантийное письмо. Оно является единственным цифровым подтверждением обязательств нашего сервиса.</p>
-      <p class="lang-zh">在发送代币之前，请务必保存保修信。它是我们服务所承担义务 Liquidity 的唯一数字证明。</p>
+      <p class="lang-en">Before sending coins, make sure to save the letter of guarantee. It is the only digital proof of our service's obligations.</p>
+      <p class="lang-zh">在发送代币之前，请务必保存保修信。它是我们服务所承担义务的唯一数字证明。</p>
       
-      <button class="btn-download" onclick="downloadGuarantee()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <button type="button" class="btn-guarantee" onclick="processGuaranteeDownload()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span class="lang-ru">Скачать Letter of Guarantee (.txt)</span>
+        <span class="lang-en">Download Letter of Guarantee (.txt)</span>
         <span class="lang-zh">下载保修信 (.txt)</span>
       </button>
     </div>
 
-    <button class="btn-submit">
+    <button class="btn-action">
       <span class="lang-ru">Начать очистку средств</span>
+      <span class="lang-en">Start Cleansing Funds</span>
       <span class="lang-zh">开始清理资金</span>
     </button>
   </main>
 
-  <section class="faq-section">
-    <h2>FAQ</h2>
-    
-    <div class="faq-item">
-      <button class="faq-trigger" onclick="toggleFaq(this)">
+  <section class="faq-container">
+    <h3>FAQ</h3>
+
+    <div class="faq-row">
+      <button class="faq-head" onclick="triggerFaq(this)">
         <span class="lang-ru">Как устроен временной регламент от 2 до 4 часов?</span>
+        <span class="lang-en">How does the 2 to 4 hours time regulation work?</span>
         <span class="lang-zh">2至4小时的时间规程是如何运作的？</span>
       </button>
-      <div class="faq-content">
-        <div class="faq-content-inner">
+      <div class="faq-body">
+        <div class="faq-body-content">
           <span class="lang-ru">Искусственная временная задержка необходима для разрыва связи между вашим входящим и исходящим транзакционными потоками. Если монеты выводятся мгновенно, блокчейн-аналитика легко связывает их по времени. Случайная задержка в пределах 2–4 часов полностью уничтожает эту корреляцию.</span>
+          <span class="lang-en">An artificial time delay is necessary to break the link between your incoming and outgoing transaction flows. If coins are withdrawn instantly, blockchain analytics can easily connect them by time. A random delay within 2–4 hours completely destroys this correlation.</span>
           <span class="lang-zh">人为的时间延迟是为了切断您的入账和出账交易流之间的联系。如果硬币立即提取，区块链分析很容易在时间上将它们联系起来。在 2-4 小时内的随机延迟完全消除了这种相关性。</span>
         </div>
       </div>
     </div>
 
-    <div class="faq-item">
-      <button class="faq-trigger" onclick="toggleFaq(this)">
+    <div class="faq-row">
+      <button class="faq-head" onclick="triggerFaq(this)">
         <span class="lang-ru">Что такое страховой депозит пула?</span>
+        <span class="lang-en">What is the pool's insurance deposit?</span>
         <span class="lang-zh">什么是资金池的保险保证金？</span>
       </button>
-      <div class="faq-content">
-        <div class="faq-content-inner">
+      <div class="faq-body">
+        <div class="faq-body-content">
           <span class="lang-ru">Наш сервис размещает крупные гарантийные депозиты на авторитетных профильных площадках и теневых форумах. Это обеспечивает полную финансовую подушку и гарантирует моментальные выплаты пользователям даже при максимальных объемах смешивания.</span>
+          <span class="lang-en">Our service places large security deposits on reputable specialized platforms and shadow forums. This provides a full financial cushion and guarantees instant payouts to users even at maximum mixing volumes.</span>
           <span class="lang-zh">我们的服务在权威的专业平台和暗网论坛上存入大额保证金。这提供了完全的财务缓冲，并确保即使在最大混合量下也能向用户实现瞬间付款。</span>
         </div>
       </div>
     </div>
 
-    <div class="faq-item">
-      <button class="faq-trigger" onclick="toggleFaq(this)">
+    <div class="faq-row">
+      <button class="faq-head" onclick="triggerFaq(this)">
         <span class="lang-ru">Проходят ли ваши монеты AML-проверку?</span>
-        <span class="lang-zh">您的硬币是否通过AML（反洗钱）检查？</span>
+        <span class="lang-en">Do your coins pass AML verification?</span>
+        <span class="lang-zh">您的硬币是否通过AML检查？</span>
       </button>
-      <div class="faq-content">
-        <div class="faq-content-inner">
+      <div class="faq-body">
+        <div class="faq-body-content">
           <span class="lang-ru">Да. Мы используем исключительно верифицированные приватные пулы, ликвидность в которые поступает от крупных майнеров и регулируемых бирж без «грязного» следа. Все монеты на выходе имеют идеальный AML-скоринг (0-10% Risk Score) по системам Chainalysis и Crystal.</span>
+          <span class="lang-en">Yes. We exclusively use verified private pools, with liquidity coming from large miners and regulated exchanges without a "dirty" trail. All output coins have an ideal AML scoring (0-10% Risk Score) according to Chainalysis and Crystal systems.</span>
           <span class="lang-zh">是的。我们完全使用经过验证的隐私资金池，其中的流动性来自大型矿工和受监管的交易所，没有“脏”痕迹。所有输出的硬币在 Chainalysis 和 Crystal 系统中都具有完美的 AML 评分（0-10% 风险评分）。</span>
         </div>
       </div>
@@ -377,53 +367,53 @@
   </section>
 
   <script>
-    // Переключение языка
-    function changeLang(lang) {
-      document.body.className = 'lang-' + lang;
+    // Переключение языковых классов на теге body
+    function toggleLanguage(targetLang) {
+      document.body.className = 'lang-' + targetLang;
     }
 
-    // Аккордеон для FAQ
-    function toggleFaq(button) {
-      const item = button.parentElement;
-      const content = button.nextElementSibling;
+    // Логика работы аккордеона FAQ
+    function triggerFaq(element) {
+      const parentRow = element.parentElement;
+      const expandableBody = element.nextElementSibling;
       
-      item.classList.toggle('active');
+      parentRow.classList.toggle('open');
       
-      if (item.classList.contains('active')) {
-        content.style.maxHeight = content.scrollHeight + "px";
+      if (parentRow.classList.contains('open')) {
+        expandableBody.style.maxHeight = expandableBody.scrollHeight + "px";
       } else {
-        content.style.maxHeight = "0";
+        expandableBody.style.maxHeight = "0";
       }
     }
 
-    // Генерация и скачивание Гарантийного письма
-    function downloadGuarantee() {
-      const source = document.getElementById('source_addr').value || 'NOT_SPECIFIED';
-      const target = document.getElementById('target_addr').value || 'NOT_SPECIFIED';
-      const timestamp = new Date().toISOString();
-      const sessionId = 'BV-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    // Генерация текстового файла гарантийного письма на лету
+    function processGuaranteeDownload() {
+      const srcAddr = document.getElementById('source').value || 'NOT_PROVISIONED';
+      const tgtAddr = document.getElementById('target').value || 'NOT_PROVISIONED';
+      const dateString = new Date().toISOString();
+      const randomId = 'BV-SESSION-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-      const textOutput = `==================================================
-                 BLURVAULT
-            LETTER OF GUARANTEE
+      const textDocumentContent = `==================================================
+                 BLURVAULT NETWORK
+            OFFICIAL LETTER OF GUARANTEE
 ==================================================
-Session Identifier: ${sessionId}
-Created Timestamp : ${timestamp}
+Session ID   : ${randomId}
+Timestamp    : ${dateString}
 --------------------------------------------------
-Source Address    : ${source}
-Target Address    : ${target}
+Source Wallet: ${srcAddr}
+Target Wallet: ${tgtAddr}
 --------------------------------------------------
-This document serves as a digital guarantee that the deposit address generated during this session belongs exclusively to BlurVault network pools. 
+This file validates that any funds dispatched to the temporary deposit address generated under this session identifier will be completely mixed and securely transferred to the verified target address specified above.
 
-All transaction logs will be permanently deleted after 24 hours. Keep this letter as proof of exchange until funds arrive.
+Logs are scheduled for total destruction within 24 hours. Keep this record safe.
 ==================================================`;
 
-      const blob = new Blob([textOutput], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `BlurVault_Guarantee_${sessionId}.txt`;
-      link.click();
-      URL.revokeObjectURL(link.href);
+      const standardBlob = new Blob([textDocumentContent], { type: 'text/plain;charset=utf-8' });
+      const temporaryAnchor = document.createElement('a');
+      temporaryAnchor.href = URL.createObjectURL(standardBlob);
+      temporaryAnchor.download = `BlurVault_Guarantee_${randomId}.txt`;
+      temporaryAnchor.click();
+      URL.revokeObjectURL(temporaryAnchor.href);
     }
   </script>
 </body>
