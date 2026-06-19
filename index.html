@@ -1,543 +1,430 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RED MIXER — Премиальный сервис анонимизации криптовалюты</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🌪</text></svg>">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --p:#a855f7;--p2:#9333ea;--p3:#7e22ce;
-  --pa:#c084fc;--pb:#d8b4fe;
-  --bg:#09090b;--c1:#121214;--c2:#1a1a1e;--c3:#232329;
-  --br:rgba(255,255,255,.06);--br2:rgba(168,85,247,.4);
-  --tx:#f4f4f5;--tx2:#a1a1aa;--tx3:#71717a;
-  --gn:#22c55e;--pill:rgba(168,85,247,.1);--pill-tx:#e9d5ff;
-}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;overflow-x:hidden;line-height:1.6;max-width:480px;margin:0 auto;position:relative;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlurVault — Конфиденциальные Транзакции</title>
+  <style>
+    /* Базовые стили и обнуление */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
 
-/* ФОН */
-.bg-canvas { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; background: radial-gradient(circle at 50% 50%, #110e1a 0%, #09090b 100%); }
-.cyber-grid { position: absolute; bottom: -20vh; left: -50vw; width: 200vw; height: 60vh; background-image: linear-gradient(to right, rgba(168, 85, 247, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(168, 85, 247, 0.04) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(600px) rotateX(75deg); mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); }
+    body {
+      background: linear-gradient(135deg, #0d0e12 0%, #151821 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-nav, .hero, .ticker, .stats-bar, .section, footer { position: relative; z-index: 10; }
+    /* Переключение языков через классы body */
+    body.lang-ru .lang-zh { display: none !important; }
+    body.lang-zh .lang-ru { display: none !important; }
 
-/* ЛАНГ-БАР СВЕРХУ */
-.lang-bar { background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--br); padding: 8px 20px; display: flex; justify-content: flex-end; gap: 12px; position: relative; z-index: 110; }
-.lang-btn { background: none; border: 1px solid transparent; color: var(--tx3); font-size: 12px; font-weight: 600; cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: all 0.2s; }
-.lang-btn:hover, .lang-btn.active { color: var(--pa); border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.05); }
+    /* Шапка и Логотип */
+    header {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 10px 0;
+    }
 
-/* ШАПКА */
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;backdrop-filter:blur(24px);background:rgba(9,9,11,.6);border-bottom:1px solid rgba(255,255,255,0.03);}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.logo-em{font-size:24px;line-height:1;filter: drop-shadow(0 0 8px var(--p));}
-.logo-txt{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-0.03em;}
-.logo-txt b{color:var(--p);font-weight:900;}
-.nav-sup{padding:8px 18px;background:var(--p);color:#fff;font-size:12px;font-weight:600;border-radius:99px;text-decoration:none;transition:all .25s;box-shadow:0 0 20px rgba(168,85,247,0.3);}
-.nav-sup:hover{background:var(--p2);transform:translateY(-2px);}
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
 
-/* HERO */
-.hero{padding:24px 20px;}
-.hero-content { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
-.hero-deco{font-size:11px;color:var(--pa);text-transform:uppercase;letter-spacing:.15em;font-weight:700; display: inline-flex; align-items: center; gap: 6px; }
-.hero-deco::before { content:''; width: 6px; height: 6px; background: var(--p); border-radius: 50%; box-shadow: 0 0 8px var(--p); }
-.hero-h1{font-size:36px;font-weight:900;line-height:1.15;letter-spacing:-.04em;color:#fff;}
-.hero-h1 span{ background: linear-gradient(135deg, var(--pb), var(--p), #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-subtitle { font-size: 14px; color: var(--tx2); line-height: 1.6; }
+    .logo-text span {
+      color: #a855f7; /* Неоновый фиолетовый акцент */
+    }
 
-.hero-bullets { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-.hb-item { display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 16px; }
-.hb-icon { width: 38px; height: 38px; min-width: 38px; background: rgba(168, 85, 247, 0.12); border-radius: 10px; display: grid; place-items: center; color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
-.hb-txt { display: flex; flex-direction: column; gap: 2px; }
-.hb-title { font-size: 14px; font-weight: 700; color: #ffffff; }
-.hb-desc { font-size: 12px; color: #a1a1aa; line-height: 1.4; }
+    .lang-switcher {
+      display: flex;
+      gap: 8px;
+    }
 
-/* ФОРМА */
-.form-box{background:rgba(18, 18, 20, 0.8);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.05);border-radius:24px;padding:20px;box-shadow:0 30px 60px rgba(0,0,0,0.5);}
-.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.fld label{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
-.fld input,.fld select{background:rgba(0,0,0,0.4);border:1px solid var(--br);border-radius:12px;padding:12px 14px;color:var(--tx);font-size:14px;outline:none;transition:all .25s;width:100%;}
-.fld input:focus,.fld select:focus{border-color:var(--br2);box-shadow:0 0 0 3px rgba(168,85,247,.15);}
+    .lang-btn {
+      background: #1e2230;
+      border: 1px solid #333a50;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
 
-.exch{background:rgba(255,255,255,0.01);border:1px solid var(--br);border-radius:16px;padding:14px;margin-bottom:14px;}
-.exch-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.exch-lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;}
-.exch-rate-lbl{font-size:11px;color:var(--pa);font-weight:700;}
-.exch-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:12px;}
-.exch-arr{width:32px;height:32px;background:var(--c3);border:1px solid var(--br);border-radius:50%;display:grid;place-items:center;margin-top:18px;}
-.exch-arr svg{width:14px;height:14px;stroke:var(--pa);fill:none;stroke-width:2;}
-.exch-fixed{background:var(--c2);border:1px solid var(--br);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--tx);display:flex;align-items:center;gap:6px;height:45px;}
-.res-box{background:rgba(0,0,0,0.3);border:1px solid var(--br);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;}
-.res-lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;margin-bottom:2px;}
-.res-val{font-size:16px;font-weight:700;color:#fff;}
-.res-val.mt{color:var(--tx3);font-size:12px;font-weight:400;}
-.res-cur{font-size:13px;color:var(--pa);font-weight:700;}
+    .lang-btn:hover {
+      border-color: #a855f7;
+      color: #fff;
+    }
 
-.cks{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.ck{display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none;}
-.ck input{display:none;}
-.ck-b{width:16px;height:16px;min-width:16px;border:1px solid var(--tx3);border-radius:5px;display:flex;align-items:center;justify-content:center;margin-top:2px;background:rgba(0,0,0,0.3);}
-.ck:has(input:checked) .ck-b{background:var(--p);border-color:var(--p);}
-.ck-m{display:none;}
-.ck:has(input:checked) .ck-m{display:block;}
-.ck-m svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;}
-.ck-l{font-size:11px;color:var(--tx2);line-height:1.4;}
-.ck-l a{color:var(--pa);text-decoration:none;}
+    body.lang-ru .btn-ru, body.lang-zh .btn-zh {
+      background: #a855f7;
+      border-color: #a855f7;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+    }
 
-.btn-big{width:100%;padding:16px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-big:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(168,85,247,0.3);}
-.btn-big svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;}
+    /* Основной контейнер формы */
+    .main-card {
+      background: #11141d;
+      border: 1px solid #1e2333;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 650px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      margin-bottom: 30px;
+    }
 
-/* БЕГУЩИЕ СТРОКИ (БЕСШОВНЫЕ) */
-.ticker{overflow:hidden;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:10px 0;background:rgba(0,0,0,0.4);margin-bottom:24px;display:flex;}
-.ticker-track{display:flex;gap:30px;padding-right:30px;animation:tk-scroll 25s linear infinite;white-space:nowrap;font-size:12px;color:var(--tx2);flex-shrink:0;}
-.tk-i{display:inline-flex;align-items:center;gap:6px;}
-.tk-k{font-size:10px;color:var(--tx3);text-transform:uppercase;font-weight:600;}
-.tk-v{color:var(--pa);font-weight:700;}
-@keyframes tk-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-align: center;
+      color: #fff;
+    }
 
-/* ЛЕНТА ДЕПОЗИТОВ И ПЛОЩАДОК (БЕСШОВНАЯ) */
-.forum-ticker { background: rgba(18,18,20,0.9); border-top: 1px solid rgba(168,85,247,0.2); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 12px 0; overflow: hidden; position: relative; z-index: 10; margin-top: 32px; display: flex; }
-.forum-track { display: flex; gap: 40px; padding-right: 40px; animation: forum-scroll 32s linear infinite; white-space: nowrap; flex-shrink: 0; }
-.forum-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 8px; border: 1px solid var(--br); }
-.forum-tag b { color: var(--p); }
-.forum-dep { color: var(--gn); font-weight: 700; background: rgba(34,197,94,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-@keyframes forum-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+    /* Поля ввода */
+    .input-field-group {
+      margin-bottom: 20px;
+    }
 
-/* СТАТИСТИКА */
-.stats-bar{background:rgba(18, 18, 20, 0.6);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:16px;padding:16px;margin:0 16px 28px;display:flex;}
-.stat-item{flex:1;text-align:center;}
-.stat-item+.stat-item{border-left:1px solid var(--br);}
-.stat-v{font-size:18px;font-weight:700;color:#fff;}
-.stat-l{font-size:10px;color:var(--tx3);text-transform:uppercase;}
+    .field-label {
+      display: block;
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
 
-/* СЕКЦИИ */
-.section{padding:0 16px;margin-bottom:36px;}
-.sec-deco{font-size:10px;color:var(--p);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
-.sec-h{font-size:22px;font-weight:900;margin-bottom:16px;color:#fff;}
-.feat-list, .how-list{display:flex;flex-direction:column;gap:10px;}
-.feat-card, .how-item{background:rgba(18, 18, 20, 0.6);border:1px solid var(--br);border-radius:16px;padding:16px;}
-.feat-card-title, .how-title{font-size:14px;font-weight:700;margin-bottom:6px;color:#fff;}
-.feat-card-desc, .how-desc{font-size:13px;color:var(--tx2);line-height:1.5;}
-.how-item{display:flex;gap:14px;}
-.how-num{font-size:28px;font-weight:900;color:rgba(168,85,247,0.2);line-height:1;}
+    .input-wrapper {
+      position: relative;
+    }
 
-/* БАЗА ЗНАНИЙ */
-.faq-list{display:flex;flex-direction:column;gap:8px;}
-.faq-item{background:rgba(18, 18, 20, 0.6);border:1px solid var(--br);border-radius:12px;overflow:hidden;cursor:pointer;}
-.faq-q{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;color:#fff;}
-.faq-icon svg{width:12px;height:12px;stroke:var(--pa);fill:none;stroke-width:2.5;transition: transform 0.3s;}
-.faq-item.open .faq-icon svg{transform:rotate(180deg);}
-.faq-a{max-height:0;overflow:hidden;transition:all 0.3s ease;font-size:13px;color:var(--tx2);line-height:1.5;padding:0 16px;}
-.faq-item.open .faq-a{max-height:300px;padding:0 16px 14px;}
+    .input-wrapper input {
+      width: 100%;
+      background: #161a26;
+      border: 1px solid #242b42;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s;
+    }
 
-footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direction:column;gap:16px;background:rgba(9, 9, 11, 0.8);}
-.ft-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.ft-m{width:24px;height:24px;background:var(--p);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:900;color:#fff;}
-.ft-n{font-size:14px;font-weight:800;color:#fff;}
-.ft-n b{color:var(--p);}
-.ft-links{display:flex;gap:16px;}
-.ft-links a{font-size:12px;color:var(--tx3);text-decoration:none;}
-.ft-c{font-size:11px;color:var(--tx3);}
+    .input-wrapper input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+    }
 
-/* ЗАЩИЩЕННЫЙ КЛИЕНТСКИЙ ЧАТ */
-.chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-.chat-btn { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--p), var(--p2)); border: none; display: grid; place-items: center; color: #fff; cursor: pointer; box-shadow: 0 8px 24px rgba(168,85,247,0.4); }
-.chat-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
-.chat-window { position: absolute; bottom: 64px; right: 0; width: 320px; height: 380px; background: #121214; border: 1px solid rgba(168,85,247,0.3); border-radius: 16px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.7); }
-.chat-window.open { display: flex; }
-.chat-head { background: #1a1a1e; padding: 12px 16px; border-bottom: 1px solid var(--br); display: flex; align-items: center; justify-content: space-between; }
-.chat-title { font-size: 13px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
-.chat-title::before { content:''; width: 8px; height: 8px; background: var(--gn); border-radius: 50%; }
-.chat-close { background: none; border: none; color: var(--tx3); cursor: pointer; font-size: 16px; }
-.chat-body { flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 12px; background: #0c0c0e; }
-.msg { max-width: 85%; padding: 8px 12px; border-radius: 12px; line-height: 1.4; }
-.msg.in { background: #1a1a1e; color: var(--tx); align-self: flex-start; border-bottom-left-radius: 4px; }
-.msg.out { background: var(--p); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-.chat-foot { padding: 10px; background: #1a1a1e; border-top: 1px solid var(--br); display: flex; gap: 8px; }
-.chat-foot input { flex: 1; background: #09090b; border: 1px solid var(--br); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 12px; outline: none; }
-.chat-send { background: var(--p); border: none; border-radius: 8px; width: 32px; height: 32px; display: grid; place-items: center; color: #fff; cursor: pointer; }
+    /* Гарантийное письмо */
+    .guarantee-box {
+      background: rgba(168, 85, 247, 0.04);
+      border: 1px dashed rgba(168, 85, 247, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 25px 0;
+      text-align: center;
+    }
 
-@media(min-width:481px){
-  body{max-width:100%;}
-  .hero{padding:40px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;}
-  .form-box{grid-column: 2;}
-  .stats-bar{margin: 0 40px 32px;}
-  .section{padding: 0 40px;}
-  footer{padding: 32px 40px; flex-direction: row; justify-content: space-between; align-items: center;}
-}
+    .guarantee-box p {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      margin-bottom: 15px;
+    }
 
-@media(min-width:768px){
-  body{max-width:1140px; margin: 0 auto;}
-  .feat-list, .how-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .faq-list { display: flex; flex-direction: column; gap: 12px; max-width: 850px; margin: 0 auto; }
-}
-</style>
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #1e1b2e;
+      border: 1px solid #582092;
+      color: #c084fc;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-download:hover {
+      background: #2e224d;
+      color: #e9d5ff;
+      border-color: #a855f7;
+    }
+
+    /* Главная кнопка действия */
+    .btn-submit {
+      width: 100%;
+      background: #a855f7;
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-submit:hover {
+      background: #9333ea;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    /* Блок FAQ (Вопрос-Ответ) */
+    .faq-section {
+      width: 100%;
+      max-width: 650px;
+      margin-top: 10px;
+    }
+
+    .faq-section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 15px;
+      padding-left: 5px;
+    }
+
+    .faq-item {
+      background: #11141d;
+      border: 1px solid #1e2333;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .faq-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #f1f5f9;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .faq-trigger:hover {
+      background: #161a26;
+    }
+
+    .faq-trigger::after {
+      content: '▼';
+      font-size: 10px;
+      color: #64748b;
+      transition: transform 0.2s;
+    }
+
+    .faq-item.active .faq-trigger::after {
+      transform: rotate(180deg);
+      color: #a855f7;
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: #141822;
+    }
+
+    .faq-content-inner {
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #94a3b8;
+      border-top: 1px solid #1e2333;
+    }
+  </style>
 </head>
-<body>
+<body class="lang-ru">
 
-<div class="bg-canvas">
-  <div class="cyber-grid"></div>
-</div>
-
-<div class="lang-bar">
-  <button class="lang-btn active" onclick="setLang('ru', this)">RU</button>
-  <button class="lang-btn" onclick="setLang('en', this)">EN</button>
-  <button class="lang-btn" onclick="setLang('zh', this)">ZH</button>
-</div>
-
-<nav>
-  <a href="#" class="logo">
-    <svg class="logo-em" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="14" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6 4"/>
-      <path d="M16 6C12 10 12 14 16 16C20 18 20 22 16 26" stroke="#f4f4f5" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="16" cy="16" r="3" fill="#a855f7"/>
-    </svg>
-    <div class="logo-txt"><b>RED</b> MIXER</div>
-  </a>
-  <a href="#form-section" class="nav-sup" data-ln="nav_btn">Очистить</a>
-</nav>
-
-<div class="hero">
-  <div class="hero-content">
-    <div class="hero-deco">NEXT-GEN CRYPTO PRIVACY</div>
-    <h1 class="hero-h1" id="mainH1">Анонимизация<br>и очистка<br><span>Крипты</span></h1>
-    <p class="hero-subtitle" data-ln="hero_sub">
-      Премиальный сервис децентрализованного микширования. Мы полностью разрываем связь между вашей личностью и историей транзакций в блокчейне.
-    </p>
-
-    <div class="hero-bullets">
-      <div class="hb-item">
-        <div class="hb-icon">⏰</div>
-        <div class="hb-txt">
-          <div class="hb-title" data-ln="b1_t">Регламент очистки</div>
-          <div class="hb-desc" data-ln="b1_d">Полный цикл каскадного распределения занимает от 2 до 4 часов для защиты от временного анализа.</div>
-        </div>
-      </div>
-      <div class="hb-item">
-        <div class="hb-icon">🔒</div>
-        <div class="hb-txt">
-          <div class="hb-title" data-ln="b2_t">Zero-Knowledge приватность</div>
-          <div class="hb-desc" data-ln="b2_d">Никаких верификаций, хранения логов или метаданных. Полная независимость.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-box" id="form-section">
-    <div class="fld">
-      <label data-ln="l_tg">Telegram / Signal</label>
-      <input type="text" id="phone" placeholder="@username">
+  <header>
+    <div class="logo-container">
+      <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect opacity="0.3" x="2" y="10" width="8" height="12" rx="4" fill="#A855F7"/>
+        <rect opacity="0.6" x="7" y="7" width="8" height="18" rx="4" fill="#A855F7"/>
+        <path d="M14 4L26 8V18C26 23.5 21.5 27.5 14 29C6.5 27.5 2 23.5 2 18V8L14 4Z" fill="url(#logo-gradient)" />
+        <circle cx="14" cy="14" r="3" fill="#000" opacity="0.2"/>
+        <path d="M14 17V22" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="logo-gradient" x1="2" y1="4" x2="26" y2="29" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#C084FC"/>
+            <stop offset="1" stop-color="#6B21A8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="logo-text">Blur<span>Vault</span></span>
     </div>
 
-    <div class="fld">
-      <label data-ln="l_w1">Кошелек откуда отправка (Ваш текущий адрес)</label>
-      <input type="text" id="wallet_from" placeholder="Адрес кошелька-источника">
+    <div class="lang-switcher">
+      <button class="lang-btn btn-ru" onclick="changeLang('ru')">RU</button>
+      <button class="lang-btn btn-zh" onclick="changeLang('zh')">ZH</button>
     </div>
-    
-    <div class="fld">
-      <label data-ln="l_w2">Кошелек куда придут очищенные деньги (Адрес назначения)</label>
-      <input type="text" id="wallet_to" placeholder="Чистый адрес для зачисления">
+  </header>
+
+  <main class="main-card">
+    <div class="card-title">
+      <span class="lang-ru">Инициация микширования</span>
+      <span class="lang-zh">发起混合会话</span>
     </div>
 
-    <div class="exch">
-      <div class="exch-top">
-        <span class="exch-lbl" data-ln="l_param">Параметры объема</span>
-        <span class="exch-rate-lbl" data-ln="l_rate">Тариф пула: от 1.5%</span>
-      </div>
-      <div class="exch-row">
-        <div class="fld" style="margin:0">
-          <label data-ln="l_asset">Тип актива</label>
-          <select id="give" onchange="recalc()">
-            <option value="">— select —</option>
-            <option value="usdt">USDT (TRC20)</option>
-            <option value="btc">Bitcoin (BTC)</option>
-            <option value="eth">Ethereum (ETH)</option>
-          </select>
-        </div>
-        <div class="exch-arr"><svg viewBox="0 0 24 24"><polyline points="7 10 12 15 17 10"/></svg></div>
-        <div class="fld" style="margin:0">
-          <label data-ln="l_res">Результат</label>
-          <div class="exch-fixed" data-ln="l_anon">Анонимный коин</div>
-        </div>
-      </div>
-      <div class="fld" style="margin-bottom:12px;">
-        <label id="amtLabel" data-ln="l_amt">Объём для микширования</label>
-        <input type="number" id="amount" placeholder="0.00" min="0" oninput="recalc()">
-      </div>
-      <div class="res-box">
-        <div>
-          <div class="res-lbl" data-ln="l_clean">Чистыми к получению (ориентировочно)</div>
-          <div class="res-val mt" id="resultVal" data-ln="l_hint">— укажите объём активов</div>
-        </div>
-        <div class="res-cur" id="resultCur"></div>
+    <div class="input-field-group">
+      <label class="field-label lang-ru">Адрес кошелька-источника</label>
+      <label class="field-label lang-zh">发币钱包地址（您当前资金来源地址）</label>
+      <div class="input-wrapper">
+        <input type="text" id="source_addr" placeholder="TXXXXXXX...">
       </div>
     </div>
 
-    <div class="cks">
-      <label class="ck"><input type="checkbox" id="chk1"><div class="ck-b"><div class="ck-m"><svg viewBox="0 0 12 9"><polyline points="1 4 4.5 8 11 1"/></svg></div></div><div class="ck-l" data-ln="c1">Я согласен с условиями необратимости транзакций</div></label>
-      <label class="ck"><input type="checkbox" id="chk2"><div class="ck-b"><div class="ck-m"><svg viewBox="0 0 12 9"><polyline points="1 4 4.5 8 11 1"/></svg></div></div><div class="ck-l" data-ln="c2">Ознакомлен с политикой гарантированного удаления логов</div></label>
+    <div class="input-field-group">
+      <label class="field-label lang-ru">Чистый адрес для зачисления</label>
+      <label class="field-label lang-zh">收币钱包地址（清理后的干净资金接收地址）</label>
+      <div class="input-wrapper">
+        <input type="text" id="target_addr" placeholder="TXXXXXXX...">
+      </div>
     </div>
 
-    <button class="btn-big" onclick="submitForm()" data-ln="btn_start">
-      Инициировать сессию очистки
+    <div class="guarantee-box">
+      <p class="lang-ru">Перед отправкой монет обязательно сохраните гарантийное письмо. Оно является единственным цифровым подтверждением обязательств нашего сервиса.</p>
+      <p class="lang-zh">在发送代币之前，请务必保存保修信。它是我们服务所承担义务 Liquidity 的唯一数字证明。</p>
+      
+      <button class="btn-download" onclick="downloadGuarantee()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="lang-ru">Скачать Letter of Guarantee (.txt)</span>
+        <span class="lang-zh">下载保修信 (.txt)</span>
+      </button>
+    </div>
+
+    <button class="btn-submit">
+      <span class="lang-ru">Начать очистку средств</span>
+      <span class="lang-zh">开始清理资金</span>
     </button>
-  </div>
-</div>
+  </main>
 
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">TIME</span> <span data-ln="t_time">2–4 Часа</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">LOGS</span> <span data-ln="t_logs">WIPED</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">TIME</span> <span data-ln="t_time">2–4 Часа</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">LOGS</span> <span data-ln="t_logs">WIPED</span></span>
-  </div>
-  <div class="ticker-track" aria-hidden="true">
-    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">TIME</span> <span data-ln="t_time">2–4 Часа</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">LOGS</span> <span data-ln="t_logs">WIPED</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">TIME</span> <span data-ln="t_time">2–4 Часа</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">LOGS</span> <span data-ln="t_logs">WIPED</span></span>
-  </div>
-</div>
-
-<div class="stats-bar">
-  <div class="stat-item"><div class="stat-v">100%</div><div class="stat-l" data-ln="s1">Анонимность</div></div>
-  <div class="stat-item"><div class="stat-v">2-4</div><div class="stat-l" data-ln="s2">часа на очистку</div></div>
-  <div class="stat-item"><div class="stat-v">0%</div><div class="stat-l" data-ln="s3">логов сохраняется</div></div>
-</div>
-
-<div class="section" id="faq-section">
-  <div class="sec-deco">FAQ</div>
-  <h2 class="sec-h" data-ln="faq_h">База знаний</h2>
-  <div class="faq-list">
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q1">Как устроен временной регламент от 2 до 4 часов?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a1">Если выводить средства мгновенно, аналитические системы (например, Chainalysis) могут сопоставить транзакции по времени отправки. Разброс выплаты в пределах 2–4 часов полностью ломает хронологический трекинг и делает невозможным математическое связывание адресов источника и получателя.</div>
+  <section class="faq-section">
+    <h2>FAQ</h2>
+    
+    <div class="faq-item">
+      <button class="faq-trigger" onclick="toggleFaq(this)">
+        <span class="lang-ru">Как устроен временной регламент от 2 до 4 часов?</span>
+        <span class="lang-zh">2至4小时的时间规程是如何运作的？</span>
+      </button>
+      <div class="faq-content">
+        <div class="faq-content-inner">
+          <span class="lang-ru">Искусственная временная задержка необходима для разрыва связи между вашим входящим и исходящим транзакционными потоками. Если монеты выводятся мгновенно, блокчейн-аналитика легко связывает их по времени. Случайная задержка в пределах 2–4 часов полностью уничтожает эту корреляцию.</span>
+          <span class="lang-zh">人为的时间延迟是为了切断您的入账和出账交易流之间的联系。如果硬币立即提取，区块链分析很容易在时间上将它们联系起来。在 2-4 小时内的随机延迟完全消除了这种相关性。</span>
+        </div>
+      </div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q2">Что такое страховой депозит пула?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a2">Для работы на крупнейших профильных верифицированных площадках наш сервис размещает страховые гарантийные депозиты. Это подтверждает финансовую стабильность сервиса и гарантирует полное покрытие любых объемов обмена в автоматическом режиме.</div>
+
+    <div class="faq-item">
+      <button class="faq-trigger" onclick="toggleFaq(this)">
+        <span class="lang-ru">Что такое страховой депозит пула?</span>
+        <span class="lang-zh">什么是资金池的保险保证金？</span>
+      </button>
+      <div class="faq-content">
+        <div class="faq-content-inner">
+          <span class="lang-ru">Наш сервис размещает крупные гарантийные депозиты на авторитетных профильных площадках и теневых форумах. Это обеспечивает полную финансовую подушку и гарантирует моментальные выплаты пользователям даже при максимальных объемах смешивания.</span>
+          <span class="lang-zh">我们的服务在权威的专业平台和暗网论坛上存入大额保证金。这提供了完全的财务缓冲，并确保即使在最大混合量下也能向用户实现瞬间付款。</span>
+        </div>
+      </div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q"><span data-ln="q3">Проходят ли ваши монеты AML-проверку?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
-      <div class="faq-a" data-ln="a3">Да. Все оборотные средства нашего фонда пополняются исключительно через официальные OTC- дески и проверенные пулы ликвидности. Вы получаете абсолютно чистые монеты с AML-риском, близким к нулю, которые без ограничений принимаются любыми биржами мира.</div>
+
+    <div class="faq-item">
+      <button class="faq-trigger" onclick="toggleFaq(this)">
+        <span class="lang-ru">Проходят ли ваши монеты AML-проверку?</span>
+        <span class="lang-zh">您的硬币是否通过AML（反洗钱）检查？</span>
+      </button>
+      <div class="faq-content">
+        <div class="faq-content-inner">
+          <span class="lang-ru">Да. Мы используем исключительно верифицированные приватные пулы, ликвидность в которые поступает от крупных майнеров и регулируемых бирж без «грязного» следа. Все монеты на выходе имеют идеальный AML-скоринг (0-10% Risk Score) по системам Chainalysis и Crystal.</span>
+          <span class="lang-zh">是的。我们完全使用经过验证的隐私资金池，其中的流动性来自大型矿工和受监管的交易所，没有“脏”痕迹。所有输出的硬币在 Chainalysis 和 Crystal 系统中都具有完美的 AML 评分（0-10% 风险评分）。</span>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="forum-ticker">
-  <div class="forum-track">
-    <div class="forum-tag"><b>EXPLOIT</b> PARTNER <span class="forum-dep">DEP: 45,000 USD</span></div>
-    <div class="forum-tag"><b>XSS</b> VERIFIED <span class="forum-dep">DEP: 30,000 USD</span></div>
-    <div class="forum-tag"><b>WWH CLUB</b> SPONSOR <span class="forum-dep">DEP: 50,000 USD</span></div>
-    <div class="forum-tag"><b>RUTOR</b> TOP SELLER <span class="forum-dep">DEP: 25,000 USD</span></div>
-    <div class="forum-tag"><b>EXPLOIT</b> PARTNER <span class="forum-dep">DEP: 45,000 USD</span></div>
-    <div class="forum-tag"><b>XSS</b> VERIFIED <span class="forum-dep">DEP: 30,000 USD</span></div>
-    <div class="forum-tag"><b>WWH CLUB</b> SPONSOR <span class="forum-dep">DEP: 50,000 USD</span></div>
-    <div class="forum-tag"><b>RUTOR</b> TOP SELLER <span class="forum-dep">DEP: 25,000 USD</span></div>
-  </div>
-  <div class="forum-track" aria-hidden="true">
-    <div class="forum-tag"><b>EXPLOIT</b> PARTNER <span class="forum-dep">DEP: 45,000 USD</span></div>
-    <div class="forum-tag"><b>XSS</b> VERIFIED <span class="forum-dep">DEP: 30,000 USD</span></div>
-    <div class="forum-tag"><b>WWH CLUB</b> SPONSOR <span class="forum-dep">DEP: 50,000 USD</span></div>
-    <div class="forum-tag"><b>RUTOR</b> TOP SELLER <span class="forum-dep">DEP: 25,000 USD</span></div>
-    <div class="forum-tag"><b>EXPLOIT</b> PARTNER <span class="forum-dep">DEP: 45,000 USD</span></div>
-    <div class="forum-tag"><b>XSS</b> VERIFIED <span class="forum-dep">DEP: 30,000 USD</span></div>
-    <div class="forum-tag"><b>WWH CLUB</b> SPONSOR <span class="forum-dep">DEP: 50,000 USD</span></div>
-    <div class="forum-tag"><b>RUTOR</b> TOP SELLER <span class="forum-dep">DEP: 25,000 USD</span></div>
-  </div>
-</div>
-
-<footer>
-  <a href="#" class="ft-logo"><div class="ft-m">🌪</div><div class="ft-n"><b>RED</b> MIXER</div></a>
-  <div class="ft-links"><a href="#" data-ln="f_l1">Удаление логов</a><a href="#" data-ln="f_l2">Приватность</a></div>
-  <div class="ft-c">© 2026 RED MIXER. Privacy Guaranteed.</div>
-</footer>
-
-<div class="chat-widget">
-  <button class="chat-btn" onclick="toggleChat()">
-    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  </button>
-  <div class="chat-window" id="chatWin">
-    <div class="chat-head">
-      <div class="chat-title" data-ln="ch_h">Поддержка (P2P Encrypted)</div>
-      <button class="chat-close" onclick="toggleChat()">×</button>
-    </div>
-    <div class="chat-body" id="chatBody">
-      <div class="msg in" data-ln="ch_m1">Здравствуйте. Сессия поддержки полностью зашифрована локальным ключом. Логи будут уничтожены вместе с закрытием вкладки. Чем я могу помочь?</div>
-    </div>
-    <div class="chat-foot">
-      <input type="text" id="chatInp" placeholder="Message..." onkeydown="if(event.key==='Enter')sendMsg()">
-      <button class="chat-send" onclick="sendMsg()">➔</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// СЛОВАРЬ ПЕРЕВОДОВ
-const dict = {
-  ru: {
-    nav_btn: 'Очистить', hero_sub: 'Премиальный сервис децентрализованного микширования. Мы полностью разрываем связь между вашей личностью и историей транзакций в блокчейне.',
-    b1_t: 'Регламент очистки', b1_d: 'Полный цикл каскадного распределения занимает от 2 до 4 часов для защиты от временного анализа.',
-    b2_t: 'Zero-Knowledge приватность', b2_d: 'Никаких верификаций, хранения логов или метаданных. Полная независимость.',
-    l_tg: 'Telegram / Signal', l_w1: 'Кошелек откуда отправка (Ваш текущий адрес)', l_w2: 'Кошелек куда придут очищенные деньги (Адрес назначения)',
-    l_param: 'Параметры объема', l_rate: 'Тариф пула: от 1.5%', l_asset: 'Тип актива', l_res: 'Результат', l_anon: 'Анонимный коин',
-    l_amt: 'Объём для микширования', l_clean: 'Чистыми к получению (ориентировочно)', l_hint: '— укажите объём активов',
-    c1: 'Я согласен с условиями необратимости транзакций', c2: 'Ознакомлен с политикой гарантированного удаления логов',
-    btn_start: 'Инициировать сессию очистки', t_time: '2–4 Часа', t_logs: 'УНИЧТОЖЕНЫ',
-    s1: 'Анонимность', s2: 'часа на очистку', s3: 'логов сохраняется', faq_h: 'База знаний',
-    q1: 'Как устроен временной регламент от 2 до 4 часов?', a1: 'Если выводить средства мгновенно, аналитические системы могут сопоставить транзакции по времени отправки. Разброс выплаты в пределах 2–4 часов полностью ломает хронологический трекинг.',
-    q2: 'Что такое страховой депозит пула?', a2: 'Для работы на крупнейших профильных площадках наш сервис размещает страховые депозиты, что гарантирует выплаты любых объемов.',
-    q3: 'Проходят ли ваши монеты AML-проверку?', a3: 'Да. Все оборотные средства нашего фонда пополняются исключительно через официальные дески. Вы получаете абсолютно чистые монеты.',
-    f_l1: 'Удаление логов', f_l2: 'Приватность', ch_h: 'Поддержка (P2P Encrypted)', ch_m1: 'Здравствуйте. Сессия поддержки полностью зашифрована локальным ключом. Логи будут уничтожены вместе с закрытием вкладки. Чем я могу помочь?'
-  },
-  en: {
-    nav_btn: 'Clean Assets', hero_sub: 'Premium decentralized mixing service. We completely sever the link between your identity and your transaction history on the blockchain.',
-    b1_t: 'Cleaning Schedule', b1_d: 'The full cascade distribution cycle takes 2 to 4 hours to protect against time-based blockchain analysis.',
-    b2_t: 'Zero-Knowledge Privacy', b2_d: 'No verifications, no logs, no metadata storage. Absolute independence.',
-    l_tg: 'Telegram / Signal Contact', l_w1: 'Source Wallet (Address you send from)', l_w2: 'Destination Wallet (Clean coins receiving address)',
-    l_param: 'Volume Options', l_rate: 'Pool Fee: from 1.5%', l_asset: 'Asset Type', l_res: 'Result', l_anon: 'Anonymous Coin',
-    l_amt: 'Amount to Mix', l_clean: 'Estimated Clean Amount to Receive', l_hint: '— specify asset volume',
-    c1: 'I agree to the non-reversible transaction terms', c2: 'I confirm reading the guaranteed log deletion policy',
-    btn_start: 'Initiate Cleaning Session', t_time: '2–4 Hours', t_logs: 'WIPED',
-    s1: 'Anonymity', s2: 'hours processing', s3: 'logs retained', faq_h: 'Knowledge Base',
-    q1: 'Why does processing take 2 to 4 hours?', a1: 'Instant transactions allow analytical tools to link input and output addresses via timestamps. A 2-4 hour variable delay completely disrupts chronological tracking.',
-    q2: 'What is the pool insurance deposit?', a2: 'Our service maintains substantial security deposits on top industry platforms to guarantee immediate liquidation of large volumes.',
-    q3: 'Do clean coins pass AML audits?', a3: 'Yes, all reserve assets originate from verified institutional OTC liquidity providers, ensuring close to 0% AML risk scores.',
-    f_l1: 'Log Deletion', f_l2: 'Privacy Agreement', ch_h: 'Support (P2P Encrypted)', ch_m1: 'Welcome. This support session is locally encrypted. All data is purged instantly when the tab closes. How can we assist you?'
-  },
-  zh: {
-    nav_btn: '开始清理', hero_sub: '高级去中心化混币服务。我们彻底切断您的身份与区块链交易历史之间的所有关联。',
-    b1_t: '清理时间周期', b1_d: '完整的级联分发周期需要 2 到 4 小时，以防止基于时间序列的区块链数据分析。',
-    b2_t: '零知识隐私保障', b2_d: '零身份验证、零日志记录、零元数据留存。实现完全独立的资产隐私。',
-    l_tg: 'Telegram / Signal 联络方式', l_w1: '发币钱包地址（您当前资金来源地址）', l_w2: '收币钱包地址（清理后的干净资金接收地址）',
-    l_param: '数量配额参数', l_rate: '资金池费率: 1.5% 起', l_asset: '资产类型', l_res: '最终结果', l_anon: '匿名加密货币',
-    l_amt: '拟混币交易总量', l_clean: '预计到账净额（预估）', l_hint: '— 请输入资产数量',
-    c1: '我同意不可逆转的交易处理条款', c2: '我已阅读并确认全自动日志擦除技术规范',
-    btn_start: '立即启动全时清理进程', t_time: '2–4 小时', t_logs: '完全擦除',
-    s1: '匿名性级别', s2: '小时清理周期', s3: '日志留存率', faq_h: '知识库 / 常见问题',
-    q1: '为什么清理过程需要 2 到 4 小时？', a1: '即时提币容易被大数据分析系统通过时间戳关联输入与输出。设置 2-4 小时随机延迟可彻底破坏时序分析检测。',
-    q2: '什么是资金池保证金？', a2: '我们在各大专业主流平台均存入了大额履约担保保证金，确保高净值大额交易的即时承兑能力。',
-    q3: '清理后的代币能否通过合规 AML 审计？', a3: '完全可以。我们所有的储备资产均源自合规合法的 OTC 机构流动性池，AML 风险分值接近零级。',
-    f_l1: '清除历史日志', f_l2: '隐私核心条款', ch_h: '加密在线支持 (P2P Encrypted)', ch_m1: '您好。本次会话已启动本地密钥加密保护。当您关闭当前标签页时，所有聊天缓存将彻底清除。请问有什么可以帮您？'
-  }
-};
-
-function setLang(lang, btn) {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  
-  if(lang === 'ru') {
-    document.getElementById('mainH1').innerHTML = 'Анонимизация<br>и очистка<br><span>Крипты</span>';
-  } else if(lang === 'en') {
-    document.getElementById('mainH1').innerHTML = 'Anonymization<br>& Token<br><span>Cleaning</span>';
-  } else if(lang === 'zh') {
-    document.getElementById('mainH1').innerHTML = '加密资产<br>全向度混币<br><span>全面净化</span>';
-  }
-
-  document.querySelectorAll('[data-ln]').forEach(el => {
-    const key = el.getAttribute('data-ln');
-    if(dict[lang] && dict[lang][key]) {
-      el.textContent = dict[lang][key];
+  <script>
+    // Переключение языка
+    function changeLang(lang) {
+      document.body.className = 'lang-' + lang;
     }
-  });
-  recalc();
-}
 
-function fmt(n,d){return n.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});}
-function recalc(){
-  const give=document.getElementById('give').value;
-  const raw=parseFloat(document.getElementById('amount').value)||0;
-  const rv=document.getElementById('resultVal');
-  const rc=document.getElementById('resultCur');
-  const activeLang = document.querySelector('.lang-btn.active').textContent.toLowerCase();
-  
-  if(!give){
-    rv.className='res-val mt';
-    rv.textContent=dict[activeLang]['l_hint'];
-    rc.textContent='';
-    return;
-  }
-  
-  const feePercent = 0.015;
-  const curs={usdt:'USDT',btc:'BTC',eth:'ETH'};
-  
-  if(raw>0){
-    const res=raw * (1 - feePercent);
-    rv.className='res-val';
-    rv.textContent=fmt(res,4);
-    rc.textContent=curs[give];
-  }else{
-    rv.className='res-val mt';
-    rv.textContent= activeLang === 'ru' ? '— введите сумму' : (activeLang === 'en' ? '— enter amount' : '— 请输入数量');
-    rc.textContent='';
-  }
-}
-
-function submitForm() {
-  const phone = document.getElementById('phone').value;
-  const w_from = document.getElementById('wallet_from').value;
-  const w_to = document.getElementById('wallet_to').value;
-  const amount = document.getElementById('amount').value;
-  const give = document.getElementById('give').value;
-  
-  if (!phone || !amount || !w_from || !w_to || !give) {
-    alert('Заполните все поля / Please fill all fields / 请填写所有栏目');
-    return;
-  }
-  
-  if (!document.getElementById('chk1').checked || !document.getElementById('chk2').checked) {
-    alert('Примите условия / Accept terms / 请勾选同意条款');
-    return;
-  }
-
-  const logMsg = `🌪 RED MIXER CONSOLE LOG:\nFrom: ${w_from}\nTo: ${w_to}\nContact: ${phone}\nAmount: ${amount} ${give.toUpperCase()}`;
-  console.log(logMsg);
-  
-  alert('Сессия успешно создана. Заявка принята в обработку пула.');
-}
-
-function toggleFaq(el){
-  el.classList.toggle('open');
-  document.querySelectorAll('.faq-item').forEach(i=>{if(i!==el)i.classList.remove('open');});
-}
-
-function toggleChat() {
-  document.getElementById('chatWin').classList.toggle('open');
-}
-
-function sendMsg() {
-  const inp = document.getElementById('chatInp');
-  const body = document.getElementById('chatBody');
-  if(!inp.value.trim()) return;
-  
-  const uMsg = document.createElement('div');
-  uMsg.className = 'msg out';
-  uMsg.textContent = inp.value;
-  body.appendChild(uMsg);
-  
-  const userText = inp.value.toLowerCase();
-  inp.value = '';
-  body.scrollTop = body.scrollHeight;
-  
-  setTimeout(() => {
-    const sMsg = document.createElement('div');
-    sMsg.className = 'msg in';
-    if(userText.includes('миним') || userText.includes('limit') || userText.includes('min')) {
-      sMsg.textContent = 'Minimum limits: 1000 USDT / 0.02 BTC / 0.5 ETH.';
-    } else {
-      sMsg.textContent = 'Your request registered. Operator will contact you via Telegram/Signal if required. Do not close this tab until transaction complete.';
+    // Аккордеон для FAQ
+    function toggleFaq(button) {
+      const item = button.parentElement;
+      const content = button.nextElementSibling;
+      
+      item.classList.toggle('active');
+      
+      if (item.classList.contains('active')) {
+        content.style.maxHeight = content.scrollHeight + "px";
+      } else {
+        content.style.maxHeight = "0";
+      }
     }
-    body.appendChild(sMsg);
-    body.scrollTop = body.scrollHeight;
-  }, 1000);
-}
-</script>
+
+    // Генерация и скачивание Гарантийного письма
+    function downloadGuarantee() {
+      const source = document.getElementById('source_addr').value || 'NOT_SPECIFIED';
+      const target = document.getElementById('target_addr').value || 'NOT_SPECIFIED';
+      const timestamp = new Date().toISOString();
+      const sessionId = 'BV-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+      const textOutput = `==================================================
+                 BLURVAULT
+            LETTER OF GUARANTEE
+==================================================
+Session Identifier: ${sessionId}
+Created Timestamp : ${timestamp}
+--------------------------------------------------
+Source Address    : ${source}
+Target Address    : ${target}
+--------------------------------------------------
+This document serves as a digital guarantee that the deposit address generated during this session belongs exclusively to BlurVault network pools. 
+
+All transaction logs will be permanently deleted after 24 hours. Keep this letter as proof of exchange until funds arrive.
+==================================================`;
+
+      const blob = new Blob([textOutput], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `BlurVault_Guarantee_${sessionId}.txt`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
 </body>
 </html>
