@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlurVault — Премиальный сервис анонимизации криптовалюты</title>
-<!-- Подключаем официальную библиотеку OpenPGP для генерации ключей и подписей на лету -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/openpgp/5.11.1/openpgp.min.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🔒</text></svg>">
 <style>
@@ -33,10 +32,12 @@ nav, .hero, .stats-bar, .section, footer { position: relative; z-index: 10; }
 
 /* ШАПКА */
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;backdrop-filter:blur(24px);background:rgba(9,9,11,.6);border-bottom:1px solid rgba(255,255,255,0.03);}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.logo-em{font-size:24px;line-height:1;filter: drop-shadow(0 0 8px var(--p));}
-.logo-txt{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-0.03em;}
-.logo-txt b{color:var(--p);font-weight:900;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-svg{width:32px;height:32px;filter:drop-shadow(0 0 8px rgba(168,85,247,0.6));transition:transform 0.3s ease;}
+.logo:hover .logo-svg{transform:rotate(5deg) scale(1.05);}
+.logo-txt{font-size:18px;font-weight:800;color:var(--tx);letter-spacing:-0.03em;}
+.logo-txt span{background:linear-gradient(135deg, #fff, var(--pa)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+.logo-txt b{background:linear-gradient(135deg, var(--pa), #3b82f6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:900;}
 .nav-sup{padding:8px 18px;background:var(--p);color:#fff;font-size:12px;font-weight:600;border-radius:99px;text-decoration:none;transition:all .25s;box-shadow:0 0 20px rgba(168,85,247,0.3);}
 .nav-sup:hover{background:var(--p2);transform:translateY(-2px);}
 
@@ -119,10 +120,11 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .faq-item.open .faq-a{max-height:500px;padding:0 20px 18px;}
 
 footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direction:column;gap:16px;background:rgba(9, 9, 11, 0.8);}
-.ft-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.ft-m{width:24px;height:24px;background:var(--p);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:900;color:#fff;}
-.ft-n{font-size:14px;font-weight:800;color:#fff;}
-.ft-n b{color:var(--p);}
+.ft-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.ft-logo-svg{width:22px;height:22px;filter:drop-shadow(0 0 4px rgba(168,85,247,0.5));}
+.ft-n{font-size:16px;font-weight:800;color:#fff;letter-spacing:-0.02em;}
+.ft-n span{color:#fff;}
+.ft-n b{background:linear-gradient(135deg, var(--pa), #3b82f6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:900;}
 .ft-c{font-size:11px;color:var(--tx3);}
 
 /* ЗАЩИЩЕННЫЙ КЛИЕНТСКИЙ ЧАТ */
@@ -172,12 +174,18 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
 
 <nav>
   <a href="#" class="logo">
-    <svg class="logo-em" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="6" width="20" height="20" rx="4" stroke="#a855f7" stroke-width="2.5"/>
-      <circle cx="16" cy="14" r="3" stroke="#f4f4f5" stroke-width="2"/>
-      <path d="M12 22V20C12 18.5 13.5 17.5 16 17.5C18.5 17.5 20 18.5 20 20V22" stroke="#f4f4f5" stroke-width="2"/>
+    <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="shieldGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#c084fc"/>
+          <stop offset="100%" stop-color="#6366f1"/>
+        </linearGradient>
+      </defs>
+      <path d="M16 3L26 7V15C26 21.5 21.8 26.8 16 29C10.2 26.8 6 21.5 6 15V7L16 3Z" stroke="url(#shieldGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 8V14M12 13.5H20" stroke="#f4f4f5" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="16" cy="19" r="2.5" stroke="#c084fc" stroke-width="2"/>
     </svg>
-    <div class="logo-txt"><b>Blur</b>Vault</div>
+    <div class="logo-txt"><span>Blur</span><b>Vault</b></div>
   </a>
   <a href="#form-section" class="nav-sup" data-ln="nav_btn">Очистить</a>
 </nav>
@@ -313,7 +321,13 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
 </div>
 
 <footer>
-  <a href="#" class="ft-logo"><div class="ft-m">🔒</div><div class="ft-n"><b>Blur</b>Vault</div></a>
+  <a href="#" class="ft-logo">
+    <svg class="ft-logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 3L26 7V15C26 21.5 21.8 26.8 16 29C10.2 26.8 6 21.5 6 15V7L16 3Z" stroke="#c084fc" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M16 8V14M12 13.5H20" stroke="#f4f4f5" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="ft-n"><span>Blur</span><b>Vault</b></div>
+  </a>
   <div class="ft-c">© 2026 BlurVault. Privacy Guaranteed.</div>
 </footer>
 
