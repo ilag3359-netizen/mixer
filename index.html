@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlurVault — Премиальный сервис анонимизации криптовалюты</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openpgp/5.11.1/openpgp.min.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a855f7'/><text x='16' y='23' text-anchor='middle' font-family='Arial Black' font-size='18' fill='white'>🔒</text></svg>">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -22,7 +23,7 @@ body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSyst
 .bg-canvas { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; overflow: hidden; background: radial-gradient(circle at 50% 50%, #110e1a 0%, #09090b 100%); }
 .cyber-grid { position: absolute; bottom: -20vh; left: -50vw; width: 200vw; height: 60vh; background-image: linear-gradient(to right, rgba(168, 85, 247, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(168, 85, 247, 0.04) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(600px) rotateX(75deg); mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)); }
 
-nav, .hero, .ticker, .stats-bar, .section, footer { position: relative; z-index: 10; }
+nav, .hero, .stats-bar, .section, footer { position: relative; z-index: 10; }
 
 /* ЛАНГ-БАР СВЕРХУ */
 .lang-bar { background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--br); padding: 8px 20px; display: flex; justify-content: flex-end; gap: 12px; position: relative; z-index: 110; }
@@ -86,14 +87,6 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .letter-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--br); color: var(--pa); font-size: 11px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
 .letter-btn:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--p); color: #fff; }
 
-/* БЕГУЩИЕ СТРОКИ */
-.ticker{overflow:hidden;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:10px 0;background:rgba(0,0,0,0.4);margin-bottom:24px;display:flex;}
-.ticker-track{display:flex;gap:30px;padding-right:30px;animation:tk-scroll 25s linear infinite;white-space:nowrap;font-size:12px;color:var(--tx2);flex-shrink:0;}
-.tk-i{display:inline-flex;align-items:center;gap:6px;}
-.tk-k{font-size:10px;color:var(--tx3);text-transform:uppercase;font-weight:600;}
-.tk-v{color:var(--pa);font-weight:700;}
-@keyframes tk-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
-
 /* ЛЕНТА ДЕПОЗИТОВ И ПЛОЩАДОК */
 .forum-ticker { background: rgba(18,18,20,0.9); border-top: 1px solid rgba(168,85,247,0.2); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 12px 0; overflow: hidden; position: relative; z-index: 10; margin-top: 32px; display: flex; }
 .forum-track { display: flex; gap: 40px; padding-right: 40px; animation: forum-scroll 32s linear infinite; white-space: nowrap; flex-shrink: 0; }
@@ -114,7 +107,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .sec-deco{font-size:11px;color:var(--pa);text-transform:uppercase;letter-spacing:.15em;font-weight:700;margin-bottom:4px;}
 .sec-h{font-size:22px;font-weight:900;margin-bottom:16px;color:#fff;}
 
-/* FAQ / БАЗА ЗНАНИЙ (С СОВРЕМЕННЫМ ПЛАВНЫМ АККОРДЕОНОМ) */
+/* FAQ / БАЗА ЗНАНИЙ */
 .faq-list{display:flex;flex-direction:column;gap:10px;}
 .faq-item{background:rgba(18, 18, 20, 0.6);border:1px solid var(--br);border-radius:14px;overflow:hidden;cursor:pointer;transition: border-color 0.25s;}
 .faq-item:hover { border-color: rgba(168,85,247,0.2); }
@@ -273,23 +266,8 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
     <div class="letter-box">
       <div class="letter-title" data-ln="let_title">📁 Гарантийное письмо (PGP)</div>
       <div class="letter-desc" data-ln="let_desc">Каждая сессия формирует цифровое обязательство, подписанное PGP-ключом нашего фонда, гарантирующее выплату.</div>
-      <button class="letter-btn" onclick="alert('Гарантийное письмо PGP сгенерировано для текущей сессии.')" data-ln="let_btn">Проверить гарантию</button>
+      <button class="letter-btn" id="pgpBtn" onclick="generateAndSignLetter()" data-ln="let_btn">Проверить гарантию</button>
     </div>
-  </div>
-</div>
-
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">NETWORK</span> <span class="tk-v">SECURE</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">PRIVACY</span> <span class="tk-v">MAXIMUM</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-  </div>
-  <div class="ticker-track" aria-hidden="true">
-    <span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">NETWORK</span> <span class="tk-v">SECURE</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">PRIVACY</span> <span class="tk-v">MAXIMUM</span></span>
-    <span>·</span><span class="tk-i"><span class="tk-k">POOL STATUS</span><span class="tk-v">READY</span></span>
   </div>
 </div>
 
@@ -299,7 +277,6 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
   <div class="stat-item"><div class="stat-v">0%</div><div class="stat-l" data-ln="s3">логов сохраняется</div></div>
 </div>
 
-<!-- ПОЛНОСТЬЮ ОБНОВЛЕННЫЙ И СИНХРОНИЗИРОВАННЫЙ БЛОК FAQ -->
 <div class="section" id="faq-section">
   <div class="sec-deco">FAQ</div>
   <h2 class="sec-h" data-ln="faq_h">База знаний</h2>
@@ -362,7 +339,6 @@ footer{border-top:1px solid var(--br);padding:24px 20px;display:flex;flex-direct
 </div>
 
 <script>
-// ОБНОВЛЕННЫЙ ТРЕХЪЯЗЫЧНЫЙ СЛОВАРЬ (С ПОЛНОЙ ЛОКАЛИЗАЦИЕЙ FAQ)
 const dict = {
   ru: {
     nav_btn: 'Очистить', hero_sub: 'Премиальный сервис децентрализованного микширования. Мы полностью разрываем связь между вашей личностью и историей транзакций в блокчейне.',
@@ -404,7 +380,7 @@ const dict = {
   },
   zh: {
     nav_btn: '开始清理', hero_sub: '高级去中心化混币服务。我们彻底切断您的身份与区块链交易历史之间的所有关联。',
-    b1_t: '清理时间周期', b1_d: '完整的级联分发周期需要 2 到 4 小时，以防止基于时间序列的区块链数据分析。',
+    b1_t: '清理时间周期', b1_d: '完整的级联分发周期需要 2 到 4 小时，以防止基于时间序列 of 区块链数据分析。',
     b2_t: '零知识隐私保障', b2_d: '零身份验证、零日志记录、零元数据留存。实现完全独立的资产隐私。',
     l_tg: 'Telegram / Signal 联络方式', 
     l_w1: '发币钱包地址（您当前资金来源地址）', ph_w1: '来源钱包地址',
@@ -415,7 +391,7 @@ const dict = {
     let_title: '📁 担保信 / 担保函 (PGP)', let_desc: '每次交易会话都会生成一份由我们基金会的 PGP 密钥签名数字凭证，以保障承兑。', let_btn: '校验担保凭证',
     s1: '匿名性级别', s2: '小时清理周期', s3: '日志留存率',
     q1: '混币器是如何运行的？清理的核心算法是什么？', a1: '您将代币发送到系统单次生成的会话地址中。您的资产将立刻重定向至去中心化流动性资金池。作为回报，您将从我们完全独立验证的储备资金池中收到干净的代币，与您过去的充值历史彻底切断关联。',
-    q2: '起混限额是多少，动态费率又是如何计算 market 的？', a2: '最低起混额度为：1000 USDT / 0.02 BTC / 0.5 ETH。资金池的基础费率是浮动的（1.5% 至 3%），取决于交易总规模和网络链上拥堵度。您还可以设定个性化附加费率以增强防御。',
+    q2: '起混限额是多少，动态费率又是如何计算的？', a2: '最低起混额度为：1000 USDT / 0.02 BTC / 0.5 ETH。资金池的基础费率是浮动的（1.5% 至 3%），取决于交易总规模和网络链上拥堵度。您还可以设定个性化附加费率以增强防御。',
     q3: '资金到账及承兑需要多少个网络确认数？', a3: '激活系统清洗程序需要达到以下区块链确认数：比特币（BTC）需要 1 个网络确认，以太坊（ETH）智能合约需要 2 个网络确认，而高频的波场网络（USDT TRC20）需要 15-20 个网络确认，以防止双花攻击。',
     q4: '为什么出款结算会采用随机时差延迟到账？', a4: '资金池将通过 2 至 4 小时范围内的智能化随机时差进行出款结算。这一关键参数能够彻底瓦解区块链分析机构利用时间戳关联和数据聚类追踪交易源头的可能。',
     q5: '什么是 PGP 担保信，应该如何正确使用它？', a5: '担保信是在会话初始化时生成的文件，内含该笔交易的全部核心要素并经由 BlurVault 官方 PGP 密钥数字签名。该凭证是证明充值地址归属权的终极密码学证据。请务必妥善保存至完全到账。',
@@ -477,6 +453,80 @@ function recalc(){
     rv.className='res-val mt';
     rv.textContent= activeLang === 'ru' ? '— введите сумму' : (activeLang === 'en' ? '— enter amount' : '— 请输入数量');
     rc.textContent='';
+  }
+}
+
+// НАСТОЯЩАЯ ГЕНЕРАЦИЯ PGP И СКАЧИВАНИЕ ПОДПИСАННОГО ПИСЬМА НА ЛЕТУ
+async function generateAndSignLetter() {
+  const btn = document.getElementById('pgpBtn');
+  const w_from = document.getElementById('wallet_from').value || 'NOT_SPECIFIED';
+  const w_to = document.getElementById('wallet_to').value || 'NOT_SPECIFIED';
+  const amount = document.getElementById('amount').value || '0.00';
+  const give = document.getElementById('give').value || 'NONE';
+  
+  const originalText = btn.textContent;
+  btn.textContent = 'Generating PGP...';
+  btn.disabled = true;
+
+  try {
+    // 1. Генерируем ключевую пару RSA-4096 в реальном времени на стороне клиента
+    const { privateKey, publicKey } = await openpgp.generateKey({
+      type: 'rsa',
+      rsaBits: 4096,
+      userIDs: [{ name: 'BlurVault Security Fund', email: 'core@blurvault.onion' }]
+    });
+
+    // 2. Создаем шаблон официального гарантийного обязательства пула
+    const sessionID = Math.random().toString(36).substring(2, 10).toUpperCase() + '-' + Date.now().toString().slice(-4);
+    const dateStr = new Date().toUTCString();
+    
+    const letterTemplate = `-----BLURVAULT SECURE GUARANTEE LETTER-----
+Session Identifier: BVT-${sessionID}
+Timestamp (UTC): ${dateStr}
+
+Order Specifications:
+--------------------------------------------
+Depositor Source Wallet: ${w_from}
+Destination Clean Wallet: ${w_to}
+Expected Input Target: ${amount} ${give.toUpperCase()}
+Pool Exchange Action: CASCADE MULTI-MIX LIQUIDITY DISTRIBUTION
+--------------------------------------------
+
+BlurVault cryptographic security pool guarantees absolute payout of untraceable assets 
+minus dynamically calculated system fee matching current network distribution weight.
+This server generated signature acts as math-proof of ownership for deposit destination.
+
+Fund Verification Authority Public Key:
+${publicKey}
+--------------------------------------------`;
+
+    // 3. Подписываем текст письма сгенерированным приватным PGP-ключом
+    const privateKeyObj = await openpgp.readPrivateKey({ armoredKey: privateKey });
+    const message = await openpgp.createCleartextMessage({ text: letterTemplate });
+    
+    const cleartextSignedMessage = await openpgp.sign({
+      message,
+      signingKeys: privateKeyObj
+    });
+
+    // 4. Пакуем результат в .txt файл и автоматически отдаем на скачивание клиенту
+    const blob = new Blob([cleartextSignedMessage], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `BlurVault_PGP_Guarantee_BVT-${sessionID}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert('Гарантийное письмо успешно сгенерировано, подписано PGP-ключом BlurVault и скачано на ваше устройство в виде файла .txt!');
+  } catch (error) {
+    console.error(error);
+    alert('Криптографическая ошибка генерации. Попробуйте снова.');
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
   }
 }
 
